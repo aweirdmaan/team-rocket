@@ -11,7 +11,6 @@
 set -uo pipefail
 
 cd "$(dirname "$0")/.." || exit 1
-ROOT=$(pwd)
 fail=0
 note() { printf '  %s\n' "$1"; }
 ok()   { printf 'PASS  %s\n' "$1"; }
