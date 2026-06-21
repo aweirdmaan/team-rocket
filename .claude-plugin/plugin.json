@@ -1,6 +1,6 @@
 {
   "name": "team-rocket",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Tool-agnostic three-agent cluster pattern for multi-session software work, focused on the quality of what ships: correct, simple, honest, right-sized, maintainable code. TDD, live review, named code smells, and deterministic environment guardrails are means to that end, not the goal. Ships a Beads reference adapter.",
   "author": {
     "name": "team-rocket contributors"

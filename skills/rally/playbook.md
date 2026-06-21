@@ -90,6 +90,20 @@ Don't lock a goal you can't test, and don't hand a raw, un-interrogated design t
 - **Pre-commit / lint / CI gates must pass.** Zero failures before you call work done.
 - **Verify behaviour, not just tests.** When the change is observable at runtime (a command, endpoint, job, or UI path), run it and observe what it actually does before calling it done. Green tests prove assertions; running the thing proves it works. The reviewer demands the run evidence, not just a passing suite.
 
+#### Landing & the Definition of Done
+
+Implementation isn't finished when the code is written — it's finished when the story is **landed** (`/team-rocket:land`). Where the planning huddle gates *entry* with a Definition of Ready, landing gates *exit* with a **Definition of Done**:
+
+- Every locked acceptance row is **demonstrably met** — the test that pins it *and* runtime evidence (done is shown, not asserted).
+- All gates green (pre-commit, lint, CI); behaviour verified at runtime.
+- No environment / build / toolchain drift; on a feature branch, not a default branch.
+- No obvious security regression (leaked secret, injection, broken authz, risky dependency) — a light pass.
+- Discoveries, failed approaches, and manual changes recorded.
+
+If a row can't be demonstrated, it isn't done — back to implementation, don't close it. The lead opens the PR/MR, closes each goal **with a reason**, and never merges to a default branch without explicit approval.
+
+Then a short **retro closes the learning loop**: did the plan hold up against its Definition-of-Ready predictions (buildable without a workaround? scope right-sized? as testable as predicted?)? Name where the plan was wrong — that's the lesson. Meowth drafts the `TEAM-ROCKET.md` delta (new vocabulary, pattern-hierarchy update, a failure-modes exception) for the lead to approve, and files plugin-update proposals when a smell recurred. Timebox it; a trivial story's retro is one honest line.
+
 ## Cluster vs Solo
 
 **Clusters are the default. Solo is a deliberate call, not an omission.**
@@ -156,7 +170,16 @@ For each goal in the story:
     │
     ▼
 Next goal → spawn a fresh cluster
-All goals done → Meowth posts a final session summary on the story
+    │
+    ▼
+Story's goals done → LAND (/team-rocket:land):
+  verify Definition of Done · integrate & PR · lead closes with reasons · retro
+    │
+    ▼
+Retro: did the plan hold up? → TEAM-ROCKET.md delta + plugin-update proposals
+    │
+    ▼
+Meowth posts a final session summary on the story
 ```
 
 ## When To Ask vs Proceed
@@ -272,3 +295,5 @@ Cross-cutting insights (things future sessions on different tasks need) go into 
 20. **Run 5-whys before adding any abstraction** — helper, sealed trait, wrapper case class, generic, implicit, config map. If depth-three lands on "in case we need it later" / "DRY" / "for symmetry", the abstraction doesn't exist.
 21. **Use the codebase's vocabulary** — before introducing a name, check the codebase isn't already using it for a different concept. Names are promises.
 22. **Named failure modes are a shared vocabulary, not a checklist** — use the names in `failure-modes.md` so corrections are fast and the vocabulary compounds. The point is catching the smell, not completing a scan.
+23. **Done is shown, not asserted** — land every story against a Definition of Done; demonstrate each locked acceptance row (test + runtime evidence) before it closes. If you can't demonstrate it, it isn't done.
+24. **Close the learning loop** — every landing runs a retro. Ask whether the plan held up against its Definition-of-Ready predictions; record the delta into `TEAM-ROCKET.md` and propose plugin updates where a pattern recurred. A wrong prediction is a lesson, not a failure.

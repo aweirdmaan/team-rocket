@@ -25,6 +25,7 @@ cp -r team-rocket ~/.claude/plugins/team-rocket
 /team-rocket:scheme PROJ-123 "My Feature"    # Hatch a new scheme — scaffold a story
 /team-rocket:plan PROJ-123                   # Plan together — interrogate the design until it's ready to build
 /team-rocket:rally                           # Rally the team, pick up where you left off (implementation)
+/team-rocket:land PROJ-123                   # Land the story — verify Definition of Done, PR, close, retro
 ```
 
 Or just say: *"Start a team to work on PROJ-123 and PROJ-456"*
@@ -43,7 +44,7 @@ The **lead** (your main session) reads the work queue, spawns one James+Jessie+M
 
 ## How a Session Works
 
-A new story is planned before it's built: `/team-rocket:plan PROJ-123` convenes the cluster in planning mode, interrogates the design from all three lenses, and brings it to a Definition of Ready. Then `rally` implements the ready plan:
+A new story is planned before it's built: `/team-rocket:plan PROJ-123` convenes the cluster in planning mode, interrogates the design from all three lenses, and brings it to a Definition of Ready. Then `rally` implements the ready plan — and `/team-rocket:land` closes it: verify the Definition of Done (every acceptance row *demonstrated*, not asserted), open the PR, close with reasons, and run a retro that asks "did the plan hold up?" and feeds what it learns back into the team's memory and the plugin.
 
 ```
 You: /team-rocket:rally
@@ -82,6 +83,7 @@ team-rocket/
 │   ├── blast-off/SKILL.md            # /team-rocket:blast-off — wire into your stack
 │   ├── scheme/SKILL.md               # /team-rocket:scheme — scaffold a story
 │   ├── plan/SKILL.md                 # /team-rocket:plan — planning huddle → ready plan
+│   ├── land/SKILL.md                 # /team-rocket:land — Definition of Done + retro → closed
 │   └── rally/
 │       ├── SKILL.md                  # /team-rocket:rally — resume a session
 │       ├── playbook.md               # Process: modes, lifecycle, guardrails, fan-out
@@ -127,7 +129,7 @@ Goals (WHY + WHAT) are locked once approved. Implementations (HOW) can iterate �
 
 **Planning** — no code. The cluster convenes in a *planning huddle* (`/team-rocket:plan`). First it interrogates **you** relentlessly, in text, until everyone shares one mental model of the problem — vague answers get drilled into concrete, testable ones, and nothing proceeds until you confirm the written problem statement. Only then does it interrogate the *design* from three lenses — memory (Meowth), buildability (James), testability (Jessie) — until it meets a Definition of Ready. Catching a misunderstood problem here is far cheaper than discovering it mid-implementation. When you're not sure, you're in this mode.
 
-**Implementation** — ship amazing code; TDD is the default route there, not the goal. Refine the design with the lead first. Tests and code together, strong enough to fail on a real regression. Atomic commits. Pre-commit gates must pass before anything is "done."
+**Implementation** — ship amazing code; TDD is the default route there, not the goal. Refine the design with the lead first. Tests and code together, strong enough to fail on a real regression. Atomic commits. Pre-commit gates must pass — and the story is only finished when it's *landed* against a Definition of Done (every acceptance row demonstrated) and a retro has asked whether the plan held up.
 
 ### Push back is normal
 

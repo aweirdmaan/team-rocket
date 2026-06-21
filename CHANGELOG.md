@@ -3,6 +3,23 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.7.0]
+
+### Added
+- **`/team-rocket:land` — the exit bookend, closing the lifecycle.** Where `plan` gates
+  *entry* with a Definition of Ready, `land` gates *exit* with a **Definition of Done**:
+  every locked acceptance row demonstrated (test + runtime evidence — done is shown, not
+  asserted), gates green, no drift, a light security pass, on a feature branch. Then it
+  integrates/opens the PR, the lead closes each goal with a reason, and a **retro closes
+  the learning loop** — "did the plan hold up against its Definition-of-Ready
+  predictions?" — drafting a `TEAM-ROCKET.md` delta (vocabulary, pattern-hierarchy,
+  failure-modes exceptions) and filing plugin-update proposals when a pattern recurred.
+- Each agent gained a "When Landing" lens (James: produce the evidence; Jessie: own the
+  Definition of Done + a light security pass; Meowth: run the retro and write the delta).
+  The playbook gained a Landing & Definition-of-Done section, two key rules ("done is
+  shown, not asserted"; "close the learning loop"), and the land/retro step in the
+  lifecycle. README and `scheme` updated so the loop reads end-to-end.
+
 ## [1.6.0]
 
 ### Changed

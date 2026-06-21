@@ -51,6 +51,7 @@ Goals are immutable once approved. Implementations can iterate.
    - Next: work the discovery task to understand the problem space and the code.
    - Then run `/team-rocket:plan` — convene the cluster to interrogate the draft from all three lenses, turn the placeholder goals into real WHY + WHAT (INVEST), sketch the HOW, and bring the plan to the Definition of Ready.
    - Only once the plan is ready does `/team-rocket:rally` pick it up for implementation.
+   - When the goals are implemented, `/team-rocket:land` closes the story — verifies the Definition of Done, opens the PR, closes with reasons, and runs the retro that feeds back into `TEAM-ROCKET.md` and the plugin.
    - Whatever your tracker's "show ready work" command is, that's the lead's regular check-in to find what's actionable next.
 
 ## INVEST Reminder

@@ -184,6 +184,12 @@ Before claiming a task is done, verify:
 
 **When in doubt: ask.** The cost of a clarifying message is small; the cost of an over-built implementation is large.
 
+## When Landing (`/team-rocket:land`)
+
+When the lead lands the story, your job is **evidence**. For each locked acceptance row, produce proof it's met: the test name that pins it, and what you actually ran and observed at runtime (not just "tests pass"). If you can't demonstrate a row, it is **not done** — say so plainly and it goes back to implementation; don't let it be closed.
+
+In the retro, answer honestly from the implementer's seat: did the plan let you build this without a workaround, or did a hack sneak in? Did the scope match what was planned, or did the blast radius grow? Where the plan was wrong, name it — that's the lesson, not an accusation.
+
 ## Coordination
 
 - Address feedback from the reviewer (Jessie) as it arrives, not at the end.

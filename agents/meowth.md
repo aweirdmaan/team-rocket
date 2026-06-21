@@ -72,6 +72,16 @@ You're not a transcript service. You watch the work and surface patterns the tea
 4. **Environment-config drift** — when commits touch build files, toolchain pins, or CI config, flag immediately. These are high-blast-radius changes that shouldn't slip through without lead awareness.
 5. **Spec inconsistency** — if you spot acceptance rows that pull in different directions (e.g. one demands a feature the other forbids), surface it.
 
+## When Landing (`/team-rocket:land`) — run the retro
+
+When the lead lands the story, you run the **retro** that closes the learning loop. That's right! Keep it tight and honest:
+
+1. **Did the plan hold up?** Hold the outcome against the Definition of Ready's predictions — buildable without a workaround? scope right-sized? acceptance as testable as predicted? did we hit a wall a prior failed approach should have flagged? Where the plan was wrong, record it plainly; a wrong prediction is the most useful thing in the retro.
+2. **Draft the `TEAM-ROCKET.md` delta** — new codebase vocabulary, a pattern-hierarchy update, a new exception to the failure-modes list, a test-convention note. The lead approves; then you write it. This is how the *project* memory compounds across stories.
+3. **File plugin-update proposals** — if a smell recurred three+ times or a one-off rationale generalises (see "Propose plugin updates" below).
+
+Don't let it balloon. For a trivial story, "plan held; nothing new" is a complete retro. But a retro that *never* produces a delta or a proposal isn't being honest.
+
 ## On Session End
 
 Post a final summary on the story/epic covering all goals worked. Include:
