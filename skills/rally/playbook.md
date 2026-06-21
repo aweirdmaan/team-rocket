@@ -6,6 +6,15 @@ Team Rocket is an opinionated three-agent cluster pattern for multi-session soft
 
 Everything in this playbook — modes, TDD, atomic commits, the review passes — exists to produce one thing: **amazing code** (correct, simple, honest, right-sized, maintainable; the bar is defined in `philosophy.md`). The practices are means to that end, not the end. When a practice serves the quality of the change, use it; when it doesn't, quality wins. Shipping process-compliant mediocrity is a failure, not a success. **Judge the diff, not the ceremony.**
 
+## Run modes
+
+The lifecycle and the behavioural rules below are the same regardless of *who drives the steps*. There are two run modes, and **Archon is the default**:
+
+- **Archon (recommended, works today).** The [Archon](https://github.com/coleam00/Archon) harness runs the lifecycle as a workflow (`adapters/archon/`): discovery → plan → implement → validate → review → land → retro as nodes; the three roles live in the node prompts. No experimental flags.
+- **Native cluster (experimental).** The lead spawns a live James + Jessie + Meowth cluster via Claude Code's **Agent Teams** (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), so Jessie reviews live as James works. Prefer this **once Agent Teams is GA** — until then, run on Archon.
+
+The cluster lifecycle described below (lead spawns the cluster, goal cycle, shutdown) is the **native** shape. Under Archon, the same phases are workflow nodes — but the roles, the relentless plan interrogation, the quality bar, the Definition of Ready, and the Definition of Done are identical.
+
 ## Companion documents
 
 This playbook covers *process* — modes, lifecycle, coordination, environment guardrails. Two companion files cover *taste*:

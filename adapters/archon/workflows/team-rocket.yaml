@@ -16,7 +16,7 @@
 # `validate` node's bash with your project's real test/lint command.
 
 name: team-rocket
-description: Discovery → planning huddle (interrogate the lead until the problem is shared) → TDD implementation → review. Quality is the goal; the steps are means.
+description: The full team-rocket lifecycle — discovery → planning huddle (interrogate the lead until the problem is shared) → TDD implementation → validate → review → land (Definition of Done + PR) → retro. Quality is the goal; the steps are means.
 
 nodes:
   - id: discovery
@@ -78,3 +78,28 @@ nodes:
       speculative generality, defensive guards for impossible cases, weak assertions,
       vocabulary misuse). Confirm the suite fails on a plausible regression. Fix what you
       find; if a finding is really a design problem, surface it rather than papering over it.
+
+  - id: land
+    depends_on: [review]
+    prompt: |
+      Land the story — verify the Definition of Done before it closes. Done is shown, not
+      asserted: for each locked acceptance row, point to the test that pins it AND the
+      runtime evidence (you ran it, you saw the behaviour). Confirm all gates are green and
+      there's no environment / build / toolchain drift. Do a light security pass — leaked
+      secret, injection path, broken authz, risky new dependency. If any acceptance row
+      can't be demonstrated, it is NOT done: stop and route back to implementation rather
+      than closing it. When all rows are demonstrated, open the PR — title with the story
+      id; body states the WHY, the acceptance met, and the verification evidence.
+
+  - id: retro
+    depends_on: [land]
+    interactive: true          # the TEAM-ROCKET.md delta needs the lead's approval
+    prompt: |
+      Retro — close the learning loop. Hold the outcome against the plan's
+      Definition-of-Ready predictions: was it buildable without a workaround? was the scope
+      right-sized? were the acceptance rows as testable as predicted? did we hit a wall a
+      prior failed approach should have flagged? Name where the plan was wrong — that's the
+      lesson. Then draft the TEAM-ROCKET.md delta (new vocabulary, a pattern-hierarchy
+      update, a failure-modes exception, a test-convention note) for the lead to approve and
+      write, and file a plugin-update proposal if a smell recurred. Keep it tight; for a
+      trivial story, "plan held; nothing new" is a complete retro.

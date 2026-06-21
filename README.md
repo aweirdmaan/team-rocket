@@ -30,6 +30,17 @@ cp -r team-rocket ~/.claude/plugins/team-rocket
 
 Or just say: *"Start a team to work on PROJ-123 and PROJ-456"*
 
+## Run modes
+
+team-rocket runs the same lifecycle and the same behavioural rules two ways — and **Archon is the default**:
+
+| Mode | Orchestration | Status | Use when |
+|---|---|---|---|
+| **Archon (recommended)** | The [Archon](https://github.com/coleam00/Archon) harness runs team-rocket's lifecycle as a workflow (`adapters/archon/`); roles live in node prompts. | **Works today.** No experimental flags. | Default — pick this. |
+| **Native cluster (experimental)** | The lead spawns a live James + Jessie + Meowth cluster, so Jessie reviews **live as James works**. | Needs `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. | Once Agent Teams is GA — for the live-review dynamic. |
+
+We're on Archon until Claude Code's Agent Teams feature graduates from experimental. The roles, the relentless planning interrogation, the quality bar, and the Definition of Done are identical in both modes — only *who drives the steps* differs.
+
 ## The Squad
 
 Every story gets a cluster. Always. No solo missions (with one narrow exception — see the playbook).
@@ -40,11 +51,13 @@ Every story gets a cluster. Always. No solo missions (with one narrow exception 
 | **Jessie** | Reviews James's code **live as he works**. Clean code, SOLID, no shortcuts. **Critiques the spec when the implementation reveals it's wrong.** Read-only. | *"And make it double."* |
 | **Meowth** | The memory. Briefs the cluster, tracks everything, surfaces patterns the team would otherwise forget. | *"That's right!"* |
 
-The **lead** (your main session) reads the work queue, spawns one James+Jessie+Meowth cluster per story, and coordinates across clusters. Multiple stories run in parallel — each cluster owns its story.
+The **lead** (your main session) reads the work queue and coordinates the work. In **Archon mode** the three roles run as the workflow's node prompts; in **native mode** the lead spawns a live James+Jessie+Meowth cluster per story (multiple stories in parallel, each cluster owning its story). Same roles either way.
 
 ## How a Session Works
 
 A new story is planned before it's built: `/team-rocket:plan PROJ-123` convenes the cluster in planning mode, interrogates the design from all three lenses, and brings it to a Definition of Ready. Then `rally` implements the ready plan — and `/team-rocket:land` closes it: verify the Definition of Done (every acceptance row *demonstrated*, not asserted), open the PR, close with reasons, and run a retro that asks "did the plan hold up?" and feeds what it learns back into the team's memory and the plugin.
+
+The example below shows **native mode** (the live cluster). In **Archon mode** the same lifecycle runs as a workflow — *"Use archon to run the team-rocket workflow on PROJ-123"* — with Archon driving discovery → plan → implement → land and the roles living in the node prompts.
 
 ```
 You: /team-rocket:rally
@@ -182,10 +195,8 @@ The lead's job is to thread the specific commands into spawn prompts. The agents
 ## Requirements
 
 - [Claude Code](https://claude.ai/code) v2.1.32+
-- **Agent Teams enabled** — `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. This is an
-  experimental, gated surface (live inter-agent messaging). Clusters can't spawn without
-  it; if you can't enable it, you can still use the skills/guardrails/playbook solo, just
-  without the parallel James+Jessie+Meowth pattern.
+- **For the default (Archon) mode:** [Archon](https://github.com/coleam00/Archon) installed (Bun, Claude Code, GitHub CLI). No experimental flags. See `adapters/archon/`.
+- **For native mode only (experimental):** Agent Teams enabled — `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. This gated surface (live inter-agent messaging) is what lets the lead spawn the live cluster; not needed when you run on Archon. Recommended once it's GA.
 - A task tracker of your choice (the plugin doesn't bundle one; a Beads adapter ships in
   `adapters/beads/`)
 - A source-control workflow with a default branch agents stay off of

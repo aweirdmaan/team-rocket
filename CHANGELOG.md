@@ -3,6 +3,25 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.8.0]
+
+### Changed
+- **Archon is now the default run mode; the native Agent-Teams cluster is the optional,
+  experimental mode** — kept for the live-review dynamic, recommended once Agent Teams
+  graduates from experimental. team-rocket runs the same lifecycle and rules either way;
+  only the orchestration differs. Agent Teams is no longer a flat requirement — it's
+  needed *only* for native mode. Repositioned across the README (new "Run modes" table,
+  Requirements split by mode, session example labelled native), the playbook (a "Run
+  modes" section; the cluster lifecycle marked as the native shape), `blast-off` (step 7
+  is now "pick a run mode," Archon-first), and the Archon adapter README.
+
+### Added
+- **The shipped Archon workflow now covers the full lifecycle.** Added `land` (Definition
+  of Done — every acceptance row demonstrated, light security pass, open the PR) and
+  `retro` (interactive — did the plan hold up? draft the `TEAM-ROCKET.md` delta, file
+  plugin proposals) nodes to `adapters/archon/workflows/team-rocket.yaml`, matching the
+  `/team-rocket:land` skill.
+
 ## [1.7.0]
 
 ### Added
