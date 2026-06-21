@@ -70,9 +70,9 @@ Both meowths: post final session summaries; lead closes finished work.
 
 ```
 team-rocket/
-├── .claude-plugin/plugin.json        # Manifest
+├── .claude-plugin/plugin.json        # Manifest (declares agents, skills, hooks)
 ├── agents/
-│   ├── james.md                      # The implementer (with pushback rules)
+│   ├── james.md                      # The implementer (with pushback + verify rules)
 │   ├── jessie.md                     # The reviewer (with design-critique role)
 │   └── meowth.md                     # The memory (active, not passive)
 ├── skills/
@@ -80,10 +80,28 @@ team-rocket/
 │   ├── scheme/SKILL.md               # /team-rocket:scheme — scaffold a story
 │   └── rally/
 │       ├── SKILL.md                  # /team-rocket:rally — resume a session
-│       └── playbook.md               # The full behavioural ruleset
-├── settings.json                     # Agent Teams enabled
+│       ├── playbook.md               # Process: modes, lifecycle, guardrails, fan-out
+│       ├── philosophy.md             # The simplicity lens + 5-whys (the "why")
+│       ├── failure-modes.md          # Canonical named code smells
+│       └── examples.md               # Bad/good code pairs per smell
+├── hooks/
+│   ├── hooks.json                    # PreToolUse guardrails + idle/stop reminders
+│   └── guardrails.sh                 # Deterministic enforcement of the hard rules
+├── adapters/
+│   └── beads/                        # OPTIONAL Beads tracker adapter (opt-in)
+│       ├── hooks.json, on_create.sh, on_close.sh, story.formula.json, README.md
+├── scripts/validate.sh               # Self-checks (JSON, manifest, hooks, shellcheck)
+├── Makefile                          # `make validate`
+├── settings.json                     # Template: Agent Teams env + permission allow-list
+├── global-settings.json              # Template: tighter read-mostly permission set
+├── LICENSE · CHANGELOG.md
 └── README.md                         # You are here
 ```
+
+> **Settings don't auto-apply.** A plugin manifest can't ship user/project settings, so
+> `settings.json` is a *template*. To run clusters you must enable Agent Teams
+> (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) and merge the permission allow-list into your
+> own `.claude/settings.json`. `/team-rocket:blast-off` walks you through it.
 
 ## The Playbook (Highlights)
 
@@ -121,6 +139,12 @@ The cluster's job is not "convert prompt to code." Both James and Jessie are exp
 - No new dependencies without surfacing.
 - No destructive ops on shared state without explicit lead approval.
 
+Most of these aren't just prose — the `PreToolUse` hook (`hooks/guardrails.sh`) **enforces**
+them: it blocks pushes/force-pushes to default branches, committing/pushing while on one,
+`--no-verify`, and edits to build/CI/toolchain files, regardless of what any agent decides.
+The escape hatch is a human running the command directly in the terminal (a `!`-prefixed
+shell line is not a tool call, so it isn't intercepted).
+
 ### Nothing is forgotten
 
 Session history lives on the tasks themselves. Discoveries, failed approaches, manual changes, review outcomes — all recorded incrementally as each goal completes (not batched to session end). Meowth surfaces patterns: recurring smells, repeated failures, scope creep, environment drift.
@@ -140,10 +164,17 @@ Supported via convention:
 
 The lead's job is to thread the specific commands into spawn prompts. The agents' job is to follow the behavioural rules regardless.
 
+**Core stays agnostic; tracker specifics live in adapters.** Anything that hard-codes a tool (e.g. `bd` commands, a Beads formula, Beads event hooks) lives under `adapters/` as opt-in, not in the always-loaded core. A reference **Beads** adapter ships in `adapters/beads/`; write your own for Jira / Linear / GitHub Issues by mirroring it.
+
 ## Requirements
 
 - [Claude Code](https://claude.ai/code) v2.1.32+
-- A task tracker of your choice (the plugin doesn't bundle one)
+- **Agent Teams enabled** — `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. This is an
+  experimental, gated surface (live inter-agent messaging). Clusters can't spawn without
+  it; if you can't enable it, you can still use the skills/guardrails/playbook solo, just
+  without the parallel James+Jessie+Meowth pattern.
+- A task tracker of your choice (the plugin doesn't bundle one; a Beads adapter ships in
+  `adapters/beads/`)
 - A source-control workflow with a default branch agents stay off of
 
 ---
