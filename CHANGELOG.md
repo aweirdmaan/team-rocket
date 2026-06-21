@@ -3,6 +3,21 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.6.0]
+
+### Changed
+- **The Archon adapter now targets the *harness*, not the v1 RAG backend.** Replaced the
+  1.5.0 adapter (which wired Archon's archived v1 task-management + RAG server as a
+  tracker/memory backend) with an integration against Archon's current workflow engine
+  (`main`). Ships `adapters/archon/workflows/team-rocket.yaml` — team-rocket's lifecycle
+  (`discovery → plan with a human gate → implement loop → validate → review`) as an Archon
+  workflow. Archon owns the deterministic control flow (DAG, loops, human gate, worktree
+  isolation); team-rocket supplies the behaviour at each node (the roles, the relentless
+  plan interrogation, the quality bar). This is the "one orchestrator, team-rocket as the
+  taste" resolution to the two-harnesses overlap. The README and `blast-off` were updated;
+  the YAML is a template to verify against your Archon version (its AI nodes take prompts,
+  so the roles live in the prompts).
+
 ## [1.5.0]
 
 ### Added

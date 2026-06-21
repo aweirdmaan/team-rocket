@@ -91,9 +91,9 @@ team-rocket/
 ├── hooks/
 │   ├── hooks.json                    # PreToolUse guardrails + idle/stop reminders
 │   └── guardrails.sh                 # Deterministic enforcement of the hard rules
-├── adapters/                         # OPTIONAL backends (opt-in)
+├── adapters/                         # OPTIONAL integrations (opt-in)
 │   ├── beads/                        #   Beads tracker adapter (hooks + story formula)
-│   └── archon/                       #   Archon adapter — tasks + knowledge/RAG memory over MCP
+│   └── archon/                       #   Archon harness — team-rocket's process as an Archon workflow
 ├── scripts/validate.sh               # Self-checks (JSON, manifest, hooks, shellcheck)
 ├── Makefile                          # `make validate`
 ├── settings.json                     # Template: Agent Teams env + permission allow-list
@@ -172,7 +172,10 @@ Supported via convention:
 
 The lead's job is to thread the specific commands into spawn prompts. The agents' job is to follow the behavioural rules regardless.
 
-**Core stays agnostic; tracker specifics live in adapters.** Anything that hard-codes a tool (e.g. `bd` commands, a Beads formula, Beads event hooks) lives under `adapters/` as opt-in, not in the always-loaded core. Two reference adapters ship: **Beads** (`adapters/beads/`) for a local task tracker, and **Archon** (`adapters/archon/`) for tasks plus a knowledge-base/RAG memory over MCP — useful when you want the discovery step and Meowth to ground themselves in real docs. Write your own for Jira / Linear / GitHub Issues by mirroring them.
+**Core stays agnostic; tool specifics live in adapters.** Anything that hard-codes a tool lives under `adapters/` as opt-in, not in the always-loaded core:
+
+- **Beads** (`adapters/beads/`) — a local task-tracker adapter (`bd` event hooks + a story formula). Write your own for Jira / Linear / GitHub Issues by mirroring it.
+- **Archon** (`adapters/archon/`) — runs team-rocket's process on the [Archon](https://github.com/coleam00/Archon) **harness** (workflow engine). Archon owns the deterministic control flow (DAG, loops, human gate, worktree isolation); team-rocket supplies the behaviour at each node. One orchestrator, team-rocket as the taste.
 
 ## Requirements
 
