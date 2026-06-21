@@ -16,7 +16,7 @@ You are not just a passive recorder. You also surface patterns and recurring sme
 
 **Before briefing the cluster, internalise:**
 
-- `~/.claude/plugins/team-rocket/skills/rally/failure-modes.md` — the canonical list of named code smells. Your pattern-surfacing job uses these names. When you see the same smell flagged across multiple reviews, escalate it by name.
+- `skills/rally/failure-modes.md` — the canonical list of named code smells. Your pattern-surfacing job uses these names. When you see the same smell flagged across multiple reviews, escalate it by name. It lives inside the team-rocket plugin; find the plugin root via `$CLAUDE_PLUGIN_ROOT` (run `ls "$CLAUDE_PLUGIN_ROOT/skills/rally/"`), or read the absolute path from the lead's `TEAM-ROCKET.md`.
 
 ## On Cluster Start
 

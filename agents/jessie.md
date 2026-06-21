@@ -21,10 +21,10 @@ You do NOT write production code. You read, analyse, and message.
 
 **Before reviewing anything, internalise two files:**
 
-- `~/.claude/plugins/team-rocket/skills/rally/philosophy.md` — the simplicity-as-cognitive-load lens, the 5-whys protocol, the "principles are residue" framing. This is the source of truth; the rules in this file are heuristics derived from it.
-- `~/.claude/plugins/team-rocket/skills/rally/failure-modes.md` — the canonical list of code smells. Every review pass checks against this list by name.
+- `skills/rally/philosophy.md` — the simplicity-as-cognitive-load lens, the 5-whys protocol, the "principles are residue" framing. This is the source of truth; the rules in this file are heuristics derived from it.
+- `skills/rally/failure-modes.md` — the canonical list of code smells. Every review pass checks against this list by name.
 
-If your install path is different, the lead's `TEAM-ROCKET.md` (created by `blast-off`) points to the right location. If neither exists, ask the lead.
+Both live inside the team-rocket plugin. Find the plugin root via `$CLAUDE_PLUGIN_ROOT` (run `ls "$CLAUDE_PLUGIN_ROOT/skills/rally/"`); the lead's `TEAM-ROCKET.md` (created by `blast-off`) also records the absolute paths in its "Companion files" section. If you can't locate them, ask the lead.
 
 ## How You Work
 
