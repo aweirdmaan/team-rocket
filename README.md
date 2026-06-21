@@ -1,0 +1,151 @@
+# Team Rocket
+
+> *Prepare for trouble — and make it double-tested.*
+
+A Claude Code plugin that turns your AI into a coordinated squad. Pluggable into whatever task tracker you use. The playbook keeps everyone honest.
+
+Install once. Works everywhere. No files to maintain.
+
+## Blast Off
+
+```bash
+claude --plugin-dir /path/to/team-rocket
+```
+
+Or make it permanent:
+
+```bash
+cp -r team-rocket ~/.claude/plugins/team-rocket
+```
+
+## The Motto
+
+```
+/team-rocket:blast-off                       # First time in a project — wires team-rocket into your stack
+/team-rocket:scheme PROJ-123 "My Feature"    # Hatch a new scheme — scaffold a story
+/team-rocket:rally                           # Rally the team, pick up where you left off
+```
+
+Or just say: *"Start a team to work on PROJ-123 and PROJ-456"*
+
+## The Squad
+
+Every story gets a cluster. Always. No solo missions (with one narrow exception — see the playbook).
+
+| Agent | Role | Catchphrase |
+|---|---|---|
+| **James** | Writes code + tests. TDD. Atomic commits. Posts discoveries. **Pushes back on scope/design before implementing.** | *"Prepare for trouble."* |
+| **Jessie** | Reviews James's code **live as he works**. Clean code, SOLID, no shortcuts. **Critiques the spec when the implementation reveals it's wrong.** Read-only. | *"And make it double."* |
+| **Meowth** | The memory. Briefs the cluster, tracks everything, surfaces patterns the team would otherwise forget. | *"That's right!"* |
+
+The **lead** (your main session) reads the work queue, spawns one James+Jessie+Meowth cluster per story, and coordinates across clusters. Multiple stories run in parallel — each cluster owns its story.
+
+## How a Session Works
+
+```
+You: /team-rocket:rally
+
+Lead:  reads the work queue → PROJ-123 has 2 tasks, PROJ-456 has 1 task
+       "Spawning two clusters."
+
+       Cluster 1 (PROJ-123):
+         james-123, jessie-123, meowth-123
+       Cluster 2 (PROJ-456):
+         james-456, jessie-456, meowth-456
+
+meowth-123: briefs cluster from prior task notes + persistent memories
+james-123 + jessie-123 work in real time:
+  james pauses to flag a scope concern → lead resolves
+  james writes code → jessie reviews live → "this assertion is too weak" → james fixes
+  jessie spots a shared-DTO smell → escalates to lead
+  goal complete → meowth records this goal
+
+meowth-456 + cluster 2: working in parallel on PROJ-456
+
+You: "wrap up"
+Both meowths: post final session summaries; lead closes finished work.
+```
+
+## What's Inside
+
+```
+team-rocket/
+├── .claude-plugin/plugin.json        # Manifest
+├── agents/
+│   ├── james.md                      # The implementer (with pushback rules)
+│   ├── jessie.md                     # The reviewer (with design-critique role)
+│   └── meowth.md                     # The memory (active, not passive)
+├── skills/
+│   ├── blast-off/SKILL.md            # /team-rocket:blast-off — wire into your stack
+│   ├── scheme/SKILL.md               # /team-rocket:scheme — scaffold a story
+│   └── rally/
+│       ├── SKILL.md                  # /team-rocket:rally — resume a session
+│       └── playbook.md               # The full behavioural ruleset
+├── settings.json                     # Agent Teams enabled
+└── README.md                         # You are here
+```
+
+## The Playbook (Highlights)
+
+### Stories have layers
+
+| Layer | Question | Where it lives |
+|---|---|---|
+| **WHY** | Why does this matter? | Story/goal description |
+| **WHAT** | What does done look like? | Acceptance criteria |
+| **HOW** | How do we build it? | Implementation task design |
+
+Goals (WHY + WHAT) are locked once approved. Implementations (HOW) can iterate — supersede the old with the new.
+
+### Two speeds
+
+**Planning** — no code. Create issues, write design notes, debate options. When you're not sure, you're in this mode.
+
+**Implementation** — TDD. Refine the design with the lead first. Test and code together. Atomic commits. Pre-commit gates must pass before anything is "done."
+
+### Push back is normal
+
+The cluster's job is not "convert prompt to code." Both James and Jessie are expected to surface concerns:
+
+- One requirement forcing multi-file/multi-layer changes? Pause and ask.
+- Implementation needs a workaround (reflection, type bypass, framework escape hatch)? Surface as a design question.
+- Change to a shared component to serve a local need? Propose scoped alternative.
+- Conflict with a queued-up future change? Flag.
+- Test assertions that can't catch plausible regressions? Demand stronger ones.
+
+### Environment guardrails (hard rules)
+
+- No edits to build files, CI config, or toolchain pins to make local environment work.
+- No pushes to default branches (`main` / `master` / `develop`).
+- No bypassing pre-commit / CI gates.
+- No new dependencies without surfacing.
+- No destructive ops on shared state without explicit lead approval.
+
+### Nothing is forgotten
+
+Session history lives on the tasks themselves. Discoveries, failed approaches, manual changes, review outcomes — all recorded incrementally as each goal completes (not batched to session end). Meowth surfaces patterns: recurring smells, repeated failures, scope creep, environment drift.
+
+### Decisions are tracked
+
+Real architectural choices get recorded with options-considered, choice-made, trade-offs-accepted, and the date. Linked to the implementations they shape.
+
+## Plugging Into Your Stack
+
+Team Rocket is tool-agnostic. The agent definitions don't reference any specific tracker, source-control host, or CI provider. `/team-rocket:blast-off` is the adapter — it detects what your project uses (Jira, Linear, GitHub Issues, GitLab, a local DB, or a markdown file) and writes a `TEAM-ROCKET.md` at the project root so the lead has one reference.
+
+Supported via convention:
+- Any tracker that supports a 3-level hierarchy (story / goal / implementation) or can simulate one via labels.
+- Any source control with feature-branch workflow.
+- Any CI / pre-commit setup.
+
+The lead's job is to thread the specific commands into spawn prompts. The agents' job is to follow the behavioural rules regardless.
+
+## Requirements
+
+- [Claude Code](https://claude.ai/code) v2.1.32+
+- A task tracker of your choice (the plugin doesn't bundle one)
+- A source-control workflow with a default branch agents stay off of
+
+---
+
+*To protect the codebase from devastation. To unite all tests within our nation.*

@@ -1,0 +1,74 @@
+{
+  "formula": "mol-story",
+  "description": "Story structure: Goals (WHY+WHAT) → Implementations (HOW) with prereqs, ADRs, and backlogs for multi-session AI-assisted development.",
+  "version": 1,
+  "type": "workflow",
+  "vars": {
+    "story_id": {
+      "description": "Ticket ID (e.g., PROJ-123)",
+      "required": true
+    },
+    "story_title": {
+      "description": "Short title for the story",
+      "required": true
+    },
+    "story_description": {
+      "description": "WHY this story matters and WHAT it delivers",
+      "required": true
+    }
+  },
+  "steps": [
+    {
+      "id": "eda",
+      "title": "{{story_id}}: EDA — understand the problem space",
+      "type": "task",
+      "priority": 1,
+      "description": "Exploratory data analysis / research before writing any code. Understand the current state, establish baselines, identify constraints.",
+      "acceptance": "Problem space is understood. Key metrics baselined. Constraints documented. Ready to define goals."
+    },
+    {
+      "id": "goal-1",
+      "title": "{{story_id}}: Goal 1 — define after EDA",
+      "type": "epic",
+      "priority": 1,
+      "depends_on": ["eda"],
+      "description": "WHY: to be defined after EDA. WHAT: to be defined after EDA.",
+      "acceptance": "To be defined. Use INVEST criteria: Independent, Negotiable, Valuable, Estimable, Small, Testable."
+    },
+    {
+      "id": "impl-1",
+      "title": "{{story_id}}: Implementation 1 — define after goal",
+      "type": "task",
+      "priority": 1,
+      "depends_on": ["goal-1"],
+      "design": "HOW: to be defined. Include technical approach, files to modify, testing strategy."
+    },
+    {
+      "id": "goal-2",
+      "title": "{{story_id}}: Goal 2 — define after EDA",
+      "type": "epic",
+      "priority": 2,
+      "depends_on": ["eda"],
+      "description": "WHY: to be defined after EDA.",
+      "acceptance": "To be defined."
+    },
+    {
+      "id": "impl-2",
+      "title": "{{story_id}}: Implementation 2 — define after goal",
+      "type": "task",
+      "priority": 2,
+      "depends_on": ["goal-2"],
+      "design": "HOW: to be defined."
+    }
+  ],
+  "compose": {
+    "bond_points": [
+      {
+        "id": "add-goal",
+        "description": "Bond additional goals to this story",
+        "attach_to": "eda",
+        "bond_type": "sequential"
+      }
+    ]
+  }
+}
