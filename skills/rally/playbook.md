@@ -161,7 +161,7 @@ Any agent can call any of these. Lead resolves.
 
 ## Environment Guardrails
 
-Hard rules. The lead can override per-case, but agents do not override these on their own:
+Hard rules. The lead can override per-case, but agents do not override these on their own. Several of these are also **enforced deterministically** by the plugin's `PreToolUse` guardrail hook (`hooks/guardrails.sh`) — it blocks pushes to default branches, force-pushes to them, `--no-verify`, and edits to build/CI/toolchain files regardless of what an agent decides. The hook is a backstop; agents must still follow the rules so they never hit it. To intentionally bypass (lead only), run the command directly in the terminal — a human shell line is not a tool call and isn't intercepted.
 
 - **Never modify build files, CI config, or toolchain pins** (`build.gradle`, `pom.xml`, `package.json` engines, `pyproject.toml`, `.tool-versions`, `mise.toml`, `Dockerfile`, CI workflow files) to make a local environment work. Local-environment mismatch is an environment problem, not a project problem.
 - **Never push to default branches.** Always work on a feature branch. Confirm branch state before any commit.
