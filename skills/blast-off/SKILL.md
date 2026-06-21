@@ -42,7 +42,7 @@ Team Rocket is tool-agnostic — this skill adapts the cluster pattern to whatev
    - **Permissions**: the plugin's `settings.json` is a *template* of the allow-list agents need (read/edit/write, build/test runners, git, tracker CLI). Merge the entries you want into your project `.claude/settings.json`. Don't grant more than the project needs.
 
 8. **Confirm the deterministic guardrails are active.** The plugin's core `PreToolUse` hook (`hooks/guardrails.sh`) already blocks pushes to default branches, force-pushes to them, `--no-verify`, and edits to build/CI/toolchain files — automatically, once the plugin is installed. Verify it loaded (a no-op test edit to a fake `build.gradle` should be refused). This is the real insurance against the "agent pushed to main" / "agent bumped the JDK pin" failure modes; prose rules alone are not.
-   - If your tracker also supports its own event hooks, wire the matching adapter (e.g. `adapters/beads/` for Beads) so goals/closes are validated tracker-side too.
+   - If your tracker has a matching adapter, wire it: `adapters/beads/` for Beads (event hooks that validate goals/closes), or `adapters/archon/` for Archon (tasks + a knowledge-base/RAG memory over MCP — lets the discovery step and Meowth ground themselves in real docs). Note the access pattern in `TEAM-ROCKET.md`.
 
 9. **Probe the codebase for vocabulary and pattern hierarchy.** This is the project-specific complement to `failure-modes.md` and `philosophy.md`. Find:
    - **Established vocabulary** — words the codebase already uses for specific concepts (e.g. "normalize" means record deduplication; "enrich" means a lookup join; "stage" is one step of the pipeline). Sample sibling modules; grep for repeated terminology.

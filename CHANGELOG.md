@@ -3,6 +3,21 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.5.0]
+
+### Added
+- **Archon adapter (`adapters/archon/`).** Wires [Archon](https://github.com/coleam00/Archon)
+  as a backend for team-rocket's tracker and persistent-memory abstractions over MCP —
+  Archon projects/tasks as the tracker, its knowledge base + RAG as Meowth's memory and
+  as grounding for the discovery step and the plan huddle's Phase 1. The RAG/knowledge
+  role is the highest-value part (it's where team-rocket is thinnest by default).
+- The adapter is explicit that there are **two Archons**: the current `main` is a
+  TypeScript workflow engine that *overlaps* team-rocket's orchestration (an alternative
+  process owner, not a backend), while the **`archive/v1-task-management-rag`** branch is
+  the MCP task-management + RAG server this adapter targets. Includes setup, a
+  `TEAM-ROCKET.md` wiring snippet, and the caveat to read MCP tool names off the running
+  instance rather than guessing. Referenced from the README and `blast-off`.
+
 ## [1.4.1]
 
 ### Changed

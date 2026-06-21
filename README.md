@@ -91,9 +91,9 @@ team-rocket/
 ├── hooks/
 │   ├── hooks.json                    # PreToolUse guardrails + idle/stop reminders
 │   └── guardrails.sh                 # Deterministic enforcement of the hard rules
-├── adapters/
-│   └── beads/                        # OPTIONAL Beads tracker adapter (opt-in)
-│       ├── hooks.json, on_create.sh, on_close.sh, story.formula.json, README.md
+├── adapters/                         # OPTIONAL backends (opt-in)
+│   ├── beads/                        #   Beads tracker adapter (hooks + story formula)
+│   └── archon/                       #   Archon adapter — tasks + knowledge/RAG memory over MCP
 ├── scripts/validate.sh               # Self-checks (JSON, manifest, hooks, shellcheck)
 ├── Makefile                          # `make validate`
 ├── settings.json                     # Template: Agent Teams env + permission allow-list
@@ -172,7 +172,7 @@ Supported via convention:
 
 The lead's job is to thread the specific commands into spawn prompts. The agents' job is to follow the behavioural rules regardless.
 
-**Core stays agnostic; tracker specifics live in adapters.** Anything that hard-codes a tool (e.g. `bd` commands, a Beads formula, Beads event hooks) lives under `adapters/` as opt-in, not in the always-loaded core. A reference **Beads** adapter ships in `adapters/beads/`; write your own for Jira / Linear / GitHub Issues by mirroring it.
+**Core stays agnostic; tracker specifics live in adapters.** Anything that hard-codes a tool (e.g. `bd` commands, a Beads formula, Beads event hooks) lives under `adapters/` as opt-in, not in the always-loaded core. Two reference adapters ship: **Beads** (`adapters/beads/`) for a local task tracker, and **Archon** (`adapters/archon/`) for tasks plus a knowledge-base/RAG memory over MCP — useful when you want the discovery step and Meowth to ground themselves in real docs. Write your own for Jira / Linear / GitHub Issues by mirroring them.
 
 ## Requirements
 
