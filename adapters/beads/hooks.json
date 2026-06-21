@@ -1,0 +1,27 @@
+{
+  "_comment": "OPTIONAL Beads adapter for Claude Code. The plugin's core hooks (../../hooks/hooks.json) are tool-agnostic. These add Beads-specific session priming. To use, merge these entries into your project's .claude/settings.json (the plugin manifest loads only the core hooks).",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bd prime 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bd prime 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}

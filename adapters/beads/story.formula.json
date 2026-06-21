@@ -1,6 +1,6 @@
 {
   "formula": "mol-story",
-  "description": "Story structure: Goals (WHY+WHAT) → Implementations (HOW) with prereqs, ADRs, and backlogs for multi-session AI-assisted development.",
+  "description": "Story structure: Goals (WHY+WHAT) → Implementations (HOW) with prereqs, ADRs, and backlogs for multi-session AI-assisted development. Beads adapter.",
   "version": 1,
   "type": "workflow",
   "vars": {

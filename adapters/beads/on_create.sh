@@ -1,13 +1,13 @@
-#!/bin/bash
-# Beads on_create hook — enforces team rocket conventions on issue creation
-# Reads event JSON from stdin
+#!/usr/bin/env bash
+# Beads adapter — on_create hook. Enforces team-rocket story conventions when a
+# Beads issue is created. Wire this into Beads (NOT Claude Code) — see README.md.
+# Reads the event JSON from stdin.
 #
 # Rules:
-# - Epics (goals) must have description + acceptance
-# - Tasks (implementations) should have design field
+# - Epics (goals) must have description (WHY) + acceptance (WHAT)
+# - Tasks (implementations) should have a design/description (HOW)
 #
-# Exit 0 = allow create
-# Exit 2 = reject with feedback
+# Exit 0 = allow create. Exit 2 = reject with feedback.
 
 EVENT=$(cat)
 
