@@ -6,6 +6,8 @@ These are the patterns we keep hitting. Recognising them by name short-circuits 
 
 **See `examples.md` for code snippets of each smell** — visual bad/good pairs cut through the prose argument when it isn't landing.
 
+> **Note on language.** Several entries name Scala-specific shapes (sealed traits, implicit classes, case-class wrappers, currying), because that's where these examples read most cleanly. The *underlying smell* in each is language-neutral — unnecessary indirection, premature abstraction, dispatch logic in the wrong place, names that lie. Read past the Scala vocabulary to the principle, and translate the example to your language's equivalent (a TypeScript discriminated union, a Python dataclass wrapper, a Go interface with one impl). Record genuinely language-specific exceptions for your codebase in `TEAM-ROCKET.md` under "Codebase exceptions to the failure-modes list".
+
 ---
 
 ## Dispatch tags
