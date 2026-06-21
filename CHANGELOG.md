@@ -3,6 +3,22 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.4.0]
+
+### Changed
+- **The planning huddle now puts the lead at the centre.** `/team-rocket:plan` runs
+  in two phases. **Phase 1** is a relentless, text-based interrogation of the lead to
+  reach a shared understanding of the problem *before* any design: vague/ambiguous
+  answers are rejected and drilled into concrete, testable ones; nothing is assumed or
+  inferred; agents cross-examine each other and route disagreements back to the lead as
+  questions. The phase ends only when the cluster writes back a problem statement and
+  **the lead confirms it in text** — no confirmation, no design. **Phase 2** is the
+  existing three-lens design interrogation.
+- Added a "Prime Directive" (understand before designing), a questioning protocol, a
+  vague-vs-concrete table, and a Shared-Understanding gate to the skill; a matching
+  Definition-of-Ready item ("problem statement confirmed by the lead in text"); and
+  Phase-1 guidance in each agent's huddle section and the playbook.
+
 ## [1.3.0]
 
 ### Added

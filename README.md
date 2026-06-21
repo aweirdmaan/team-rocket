@@ -125,7 +125,7 @@ Goals (WHY + WHAT) are locked once approved. Implementations (HOW) can iterate �
 
 ### Two speeds
 
-**Planning** — no code. The cluster convenes in a *planning huddle* (`/team-rocket:plan`) and interrogates the design from three lenses — memory (Meowth), buildability (James), testability (Jessie) — until it meets a Definition of Ready. Catching design problems here is far cheaper than catching them mid-implementation. When you're not sure, you're in this mode.
+**Planning** — no code. The cluster convenes in a *planning huddle* (`/team-rocket:plan`). First it interrogates **you** relentlessly, in text, until everyone shares one mental model of the problem — vague answers get drilled into concrete, testable ones, and nothing proceeds until you confirm the written problem statement. Only then does it interrogate the *design* from three lenses — memory (Meowth), buildability (James), testability (Jessie) — until it meets a Definition of Ready. Catching a misunderstood problem here is far cheaper than discovering it mid-implementation. When you're not sure, you're in this mode.
 
 **Implementation** — ship amazing code; TDD is the default route there, not the goal. Refine the design with the lead first. Tests and code together, strong enough to fail on a real regression. Atomic commits. Pre-commit gates must pass before anything is "done."
 

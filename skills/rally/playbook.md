@@ -58,7 +58,11 @@ Goals are immutable once approved. Implementations can iterate (supersede the ol
 
 #### The Planning Huddle
 
-Before a story goes to implementation, the cluster plans together. Each role interrogates the draft from its own lens — the goal is to find the holes now, when they're cheapest to fix, not mid-implementation:
+Before a story goes to implementation, the cluster plans together — in two phases.
+
+**Phase 1 — understand the problem *with* the lead.** Before any design, the cluster questions the lead relentlessly, in text, until everyone shares one mental model. Vague answers ("make it fast", "handle errors") are rejected and drilled into concrete, testable ones; nothing is assumed or inferred. The phase ends only when the cluster writes back a problem statement (problem, why, who for, success, out-of-scope, constraints, edge cases) and **the lead confirms it in writing**. No confirmation, no design — building on a misunderstood problem is the most expensive bug there is.
+
+**Phase 2 — interrogate the solution.** Only then does each role interrogate the *design* from its own lens — finding the holes now, when they're cheapest to fix, not mid-implementation:
 
 - **Meowth — prior context & landmines.** Relevant conventions/vocabulary, prior discoveries, and prior *failed* approaches so the plan doesn't repeat a known dead end.
 - **James — buildability & scope.** Can it be built without a workaround? Does one acceptance row force a multi-file/multi-layer change? What's unknown? What's the simplest thing that satisfies the acceptance?
@@ -66,6 +70,7 @@ Before a story goes to implementation, the cluster plans together. Each role int
 
 The lead arbitrates, records decisions, and **locks the goals (WHY + WHAT)** once approved; the HOW stays negotiable. Output: a plan that meets the **Definition of Ready** —
 
+- Problem statement confirmed by the lead in text (Phase 1 gate passed).
 - WHY clear (one paragraph); WHAT testable and INVEST-shaped; both locked.
 - HOW sketched with concrete file/component pointers, mirroring the codebase's current pattern.
 - Jessie can name a regression a test would catch for each acceptance row.
