@@ -23,7 +23,8 @@ cp -r team-rocket ~/.claude/plugins/team-rocket
 ```
 /team-rocket:blast-off                       # First time in a project — wires team-rocket into your stack
 /team-rocket:scheme PROJ-123 "My Feature"    # Hatch a new scheme — scaffold a story
-/team-rocket:rally                           # Rally the team, pick up where you left off
+/team-rocket:plan PROJ-123                   # Plan together — interrogate the design until it's ready to build
+/team-rocket:rally                           # Rally the team, pick up where you left off (implementation)
 ```
 
 Or just say: *"Start a team to work on PROJ-123 and PROJ-456"*
@@ -41,6 +42,8 @@ Every story gets a cluster. Always. No solo missions (with one narrow exception 
 The **lead** (your main session) reads the work queue, spawns one James+Jessie+Meowth cluster per story, and coordinates across clusters. Multiple stories run in parallel — each cluster owns its story.
 
 ## How a Session Works
+
+A new story is planned before it's built: `/team-rocket:plan PROJ-123` convenes the cluster in planning mode, interrogates the design from all three lenses, and brings it to a Definition of Ready. Then `rally` implements the ready plan:
 
 ```
 You: /team-rocket:rally
@@ -78,6 +81,7 @@ team-rocket/
 ├── skills/
 │   ├── blast-off/SKILL.md            # /team-rocket:blast-off — wire into your stack
 │   ├── scheme/SKILL.md               # /team-rocket:scheme — scaffold a story
+│   ├── plan/SKILL.md                 # /team-rocket:plan — planning huddle → ready plan
 │   └── rally/
 │       ├── SKILL.md                  # /team-rocket:rally — resume a session
 │       ├── playbook.md               # Process: modes, lifecycle, guardrails, fan-out
@@ -121,7 +125,7 @@ Goals (WHY + WHAT) are locked once approved. Implementations (HOW) can iterate �
 
 ### Two speeds
 
-**Planning** — no code. Create issues, write design notes, debate options. When you're not sure, you're in this mode.
+**Planning** — no code. The cluster convenes in a *planning huddle* (`/team-rocket:plan`) and interrogates the design from three lenses — memory (Meowth), buildability (James), testability (Jessie) — until it meets a Definition of Ready. Catching design problems here is far cheaper than catching them mid-implementation. When you're not sure, you're in this mode.
 
 **Implementation** — ship amazing code; TDD is the default route there, not the goal. Refine the design with the lead first. Tests and code together, strong enough to fail on a real regression. Atomic commits. Pre-commit gates must pass before anything is "done."
 

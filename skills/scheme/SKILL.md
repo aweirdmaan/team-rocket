@@ -49,8 +49,8 @@ Goals are immutable once approved. Implementations can iterate.
 8. **Tell the lead:**
    - The story has been scaffolded with an EDA prereq and placeholder goals.
    - Next: work the EDA task to understand the problem space.
-   - Then refine the placeholder goals with real WHY + WHAT using INVEST.
-   - After goals are defined, the implementations can be sketched.
+   - Then run `/team-rocket:plan` — convene the cluster to interrogate the draft from all three lenses, turn the placeholder goals into real WHY + WHAT (INVEST), sketch the HOW, and bring the plan to the Definition of Ready.
+   - Only once the plan is ready does `/team-rocket:rally` pick it up for implementation.
    - Whatever your tracker's "show ready work" command is, that's the lead's regular check-in to find what's actionable next.
 
 ## INVEST Reminder

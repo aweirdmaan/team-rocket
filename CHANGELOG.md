@@ -3,6 +3,20 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.3.0]
+
+### Added
+- **Planning huddle — a collaborative plan phase before implementation.** New skill
+  `/team-rocket:plan` convenes the cluster in *planning mode* (no code, no branch) to
+  interrogate a story from three lenses before any code exists: Meowth (prior context
+  & landmines), James (buildability & scope), Jessie (testability, spec consistency,
+  design quality). The lead arbitrates and locks the goals; the output must meet a
+  **Definition of Ready** before `/team-rocket:rally` implements it.
+- Each agent gained an "In the Planning Huddle" section describing its planning lens;
+  the playbook expanded Planning Mode with the huddle + Definition of Ready and added
+  the plan→ready→implement step to the session lifecycle; `scheme` now routes to
+  `/team-rocket:plan` after EDA.
+
 ## [1.2.0]
 
 ### Changed

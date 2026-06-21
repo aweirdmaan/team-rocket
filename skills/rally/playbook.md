@@ -54,6 +54,28 @@ Goals are immutable once approved. Implementations can iterate (supersede the ol
 - **No production code.** Only work-tracker artefacts.
 - Write goal descriptions, acceptance, design sketches.
 - For design decisions: propose options, let the lead pick, record the rejected ones with the reason.
+- **Plan as a cluster, before you build.** Planning is not a solo lead activity — convene the full cluster in a *planning huddle* (`/team-rocket:plan`) so the design is interrogated from three perspectives before a line of code exists. See below.
+
+#### The Planning Huddle
+
+Before a story goes to implementation, the cluster plans together. Each role interrogates the draft from its own lens — the goal is to find the holes now, when they're cheapest to fix, not mid-implementation:
+
+- **Meowth — prior context & landmines.** Relevant conventions/vocabulary, prior discoveries, and prior *failed* approaches so the plan doesn't repeat a known dead end.
+- **James — buildability & scope.** Can it be built without a workaround? Does one acceptance row force a multi-file/multi-layer change? What's unknown? What's the simplest thing that satisfies the acceptance?
+- **Jessie — testability, spec consistency, design quality.** Can she name a concrete regression a test would catch for each row? Are the rows consistent? Does the design carry speculative generality or a premature abstraction?
+
+The lead arbitrates, records decisions, and **locks the goals (WHY + WHAT)** once approved; the HOW stays negotiable. Output: a plan that meets the **Definition of Ready** —
+
+- WHY clear (one paragraph); WHAT testable and INVEST-shaped; both locked.
+- HOW sketched with concrete file/component pointers, mirroring the codebase's current pattern.
+- Jessie can name a regression a test would catch for each acceptance row.
+- James confirms no workaround needed and blast radius is proportionate.
+- No prior failed approach is being repeated.
+- Every unknown is resolved or scoped into a named spike.
+- No unresolved design smell or contradiction between rows.
+- File-ownership boundaries identified.
+
+Don't lock a goal you can't test, and don't hand a raw, un-interrogated design to implementation. But timebox it: the huddle makes the plan *ready*, not *perfect* — unresolved unknowns become spikes, not blockers.
 
 ### Implementation Mode
 - **Refine before coding.** Re-read the design with the lead. Surface concerns before writing the first test.
@@ -97,7 +119,13 @@ Lead: read the work queue → find actionable work
 Lead: read each candidate task → WHY, WHAT, HOW, prior history
     │
     ▼
-Lead: spawn three agents (James + Jessie + Meowth) simultaneously per story
+Is the plan implementation-ready? ──no──▶ PLANNING HUDDLE (/team-rocket:plan)
+    │                                       cluster interrogates from 3 lenses;
+    │                                       lead locks goals; meets Definition of Ready;
+   yes                                      planning cluster shuts down
+    │  ◀──────────────────────────────────────────┘
+    ▼
+Lead: spawn three agents (James + Jessie + Meowth) simultaneously per story  (IMPLEMENTATION)
     │
     ▼
 Meowth briefs the cluster from prior task notes + persistent memories
