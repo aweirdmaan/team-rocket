@@ -19,20 +19,20 @@
   },
   "steps": [
     {
-      "id": "eda",
-      "title": "{{story_id}}: EDA — understand the problem space",
+      "id": "discovery",
+      "title": "{{story_id}}: Discovery — understand the problem space and the code",
       "type": "task",
       "priority": 1,
-      "description": "Exploratory data analysis / research before writing any code. Understand the current state, establish baselines, identify constraints.",
-      "acceptance": "Problem space is understood. Key metrics baselined. Constraints documented. Ready to define goals."
+      "description": "Investigate before writing any code: read the relevant code and subsystems, map dependencies and integration points, identify constraints and risks, and (if the story has acceptance rows) map each to an existing or new test. No code.",
+      "acceptance": "Problem space and code understood. Constraints and risks documented. Goal candidates drafted. Ready to define goals."
     },
     {
       "id": "goal-1",
-      "title": "{{story_id}}: Goal 1 — define after EDA",
+      "title": "{{story_id}}: Goal 1 — define after discovery",
       "type": "epic",
       "priority": 1,
-      "depends_on": ["eda"],
-      "description": "WHY: to be defined after EDA. WHAT: to be defined after EDA.",
+      "depends_on": ["discovery"],
+      "description": "WHY: to be defined after discovery. WHAT: to be defined after discovery.",
       "acceptance": "To be defined. Use INVEST criteria: Independent, Negotiable, Valuable, Estimable, Small, Testable."
     },
     {
@@ -45,11 +45,11 @@
     },
     {
       "id": "goal-2",
-      "title": "{{story_id}}: Goal 2 — define after EDA",
+      "title": "{{story_id}}: Goal 2 — define after discovery",
       "type": "epic",
       "priority": 2,
-      "depends_on": ["eda"],
-      "description": "WHY: to be defined after EDA.",
+      "depends_on": ["discovery"],
+      "description": "WHY: to be defined after discovery.",
       "acceptance": "To be defined."
     },
     {
@@ -66,7 +66,7 @@
       {
         "id": "add-goal",
         "description": "Bond additional goals to this story",
-        "attach_to": "eda",
+        "attach_to": "discovery",
         "bond_type": "sequential"
       }
     ]

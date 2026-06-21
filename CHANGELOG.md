@@ -3,6 +3,17 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.4.1]
+
+### Changed
+- **Replaced the data-engineering-specific "EDA" prereq with a generic "Discovery"
+  step.** Exploratory data analysis is data-platform jargon; the pre-implementation
+  task is now framed for general software work — read the relevant code and subsystems,
+  map dependencies and integration points, identify constraints and risks, map
+  acceptance rows to tests. Updated the Beads story formula (step id `eda` → `discovery`),
+  `scheme`, and `plan`. (Discovery is the agents' homework on the code; the plan huddle's
+  Phase 1 is aligning the problem with the lead — complementary, not redundant.)
+
 ## [1.4.0]
 
 ### Changed
@@ -31,7 +42,7 @@ All notable changes to team-rocket are documented here. Format loosely follows
 - Each agent gained an "In the Planning Huddle" section describing its planning lens;
   the playbook expanded Planning Mode with the huddle + Definition of Ready and added
   the plan→ready→implement step to the session lifecycle; `scheme` now routes to
-  `/team-rocket:plan` after EDA.
+  `/team-rocket:plan` after the discovery prereq.
 
 ## [1.2.0]
 

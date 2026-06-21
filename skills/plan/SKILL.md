@@ -12,7 +12,7 @@ The point isn't ceremony — it's catching the most expensive bug there is: a co
 
 ## When To Use
 
-- After `/team-rocket:scheme` scaffolded the story and the EDA / discovery is done — the placeholder goals now need to become real, interrogated goals.
+- After `/team-rocket:scheme` scaffolded the story and the discovery task is done — the placeholder goals now need to become real, interrogated goals.
 - Whenever a story or goal isn't implementation-ready: vague acceptance, untested-able outcomes, an unknown nobody has sized, a design that smells, or a problem nobody has pinned down.
 - Skip it only for genuinely trivial, single-file changes the lead fully understands (the same bar as the solo exception in the playbook).
 
@@ -95,7 +95,7 @@ If any box can't be ticked, the plan goes back — or the gap becomes a spike. D
 
 ## Steps
 
-1. **Pick the story / goal(s) to plan.** Read everything that exists: draft WHY/WHAT/HOW, EDA findings, prior session notes, related items, persistent memories.
+1. **Pick the story / goal(s) to plan.** Read everything that exists: draft WHY/WHAT/HOW, discovery findings, prior session notes, related items, persistent memories.
 2. **Spawn the cluster in PLANNING MODE** — James, Jessie, Meowth, simultaneously (single message, parallel calls), named by story. The spawn prompt must say, explicitly:
    - **PLANNING MODE: no production code, no feature branch, no commits.** The output is a *ready plan*, not a diff.
    - **Phase 1 first: interrogate the lead in text until the problem is shared and confirmed.** Reject vague answers; don't assume; don't design yet.
