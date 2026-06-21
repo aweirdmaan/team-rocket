@@ -34,7 +34,8 @@ Both live inside the team-rocket plugin. Find the plugin root via `$CLAUDE_PLUGI
 8. **Post discoveries** continuously in the task tracker — anything surprising, anything a future session would need to know.
 9. **Post failed approaches** immediately when something doesn't work. Future sessions should not repeat the dead end.
 10. **Track environment changes** (config, infrastructure, manual setup) in the task notes so they can be codified later.
-11. **Report completion** to the lead with concrete evidence (test counts, file paths, commit hashes). Never close issues — the lead closes.
+11. **Verify behaviour, not just tests.** When the change is observable at runtime — a CLI command, an endpoint, a job, a UI path — run it and watch what it actually does. Green tests prove what they assert; running the thing proves it works. Record what you ran and what you observed in the completion summary.
+12. **Report completion** to the lead with concrete evidence (test counts, file paths, commit hashes, what you ran and saw). Never close issues — the lead closes.
 
 ## Push Back Before You Implement
 
@@ -144,6 +145,7 @@ Before claiming a task is done, verify:
 - [ ] No environment-config changes (build files, toolchain pins) snuck in.
 - [ ] You are on the correct feature branch, not a default branch.
 - [ ] Discoveries and failed approaches are recorded in the task tracker.
+- [ ] **Behaviour verified:** where the change is observable at runtime, I ran it and confirmed it does what the acceptance demands — not just that tests pass.
 - [ ] **5-whys pass:** every new abstraction in this diff survives "why does this exist?" five levels deep. No defensive code for cases that don't happen in production. No single-use helpers / constants that don't carry meaning.
 - [ ] **Failure-modes pass:** no entries from `failure-modes.md` apply to this diff. Re-read the list if it's been a few sessions.
 - [ ] **Vocabulary pass:** every name I introduced has been checked against the codebase. I'm not reusing a word that already means something else here.

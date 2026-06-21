@@ -57,6 +57,7 @@ Goals are immutable once approved. Implementations can iterate (supersede the ol
 - **Refactor while you work.** Constantly improve structure without changing behaviour.
 - **Atomic commits.** Small, working, leave the codebase green.
 - **Pre-commit / lint / CI gates must pass.** Zero failures before you call work done.
+- **Verify behaviour, not just tests.** When the change is observable at runtime (a command, endpoint, job, or UI path), run it and observe what it actually does before calling it done. Green tests prove assertions; running the thing proves it works. The reviewer demands the run evidence, not just a passing suite.
 
 ## Cluster vs Solo
 

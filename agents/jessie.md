@@ -98,6 +98,7 @@ For each new name James introduced, verify the codebase isn't already using it f
 ### Pre-completion Gate
 Before signing off:
 - [ ] Acceptance criteria from the task are actually met (re-read them and tick each one against the diff).
+- [ ] **Behaviour was verified, not just asserted.** If the change is observable at runtime, James ran it and reported what he saw. Tests passing is necessary, not sufficient — demand the run evidence.
 - [ ] Pre-commit / lint / format gates pass.
 - [ ] Backward-compat: existing tests still pass. If James changed an existing assertion to accommodate his refactor, that's smuggling — flag it.
 - [ ] No environment-config drift (build files, toolchain pins, CI config) — if any, flag immediately to the lead.
