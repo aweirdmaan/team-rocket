@@ -105,6 +105,10 @@ team-rocket/
 
 ## The Playbook (Highlights)
 
+### Quality is the goal, not process
+
+The practices below — TDD, atomic commits, the 5-whys, named failure modes, live review — exist to produce one thing: **amazing code** (correct, simple, honest, right-sized, maintainable). They're means, not the scorecard. When a practice isn't serving the quality of the change, the quality wins. Process-compliant mediocrity is a failure — the diff is judged, not the ceremony.
+
 ### Stories have layers
 
 | Layer | Question | Where it lives |
@@ -119,7 +123,7 @@ Goals (WHY + WHAT) are locked once approved. Implementations (HOW) can iterate �
 
 **Planning** — no code. Create issues, write design notes, debate options. When you're not sure, you're in this mode.
 
-**Implementation** — TDD. Refine the design with the lead first. Test and code together. Atomic commits. Pre-commit gates must pass before anything is "done."
+**Implementation** — ship amazing code; TDD is the default route there, not the goal. Refine the design with the lead first. Tests and code together, strong enough to fail on a real regression. Atomic commits. Pre-commit gates must pass before anything is "done."
 
 ### Push back is normal
 

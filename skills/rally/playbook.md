@@ -2,6 +2,10 @@
 
 Team Rocket is an opinionated three-agent cluster pattern for multi-session software work. It's tool-agnostic: pair it with whichever task tracker (issue tracker, ticket system, work queue) and source control your project uses. The lead — you — wires the cluster into your toolchain. The agents themselves follow the same behavioural rules regardless of the surrounding stack.
 
+## The goal: quality, not process
+
+Everything in this playbook — modes, TDD, atomic commits, the review passes — exists to produce one thing: **amazing code** (correct, simple, honest, right-sized, maintainable; the bar is defined in `philosophy.md`). The practices are means to that end, not the end. When a practice serves the quality of the change, use it; when it doesn't, quality wins. Shipping process-compliant mediocrity is a failure, not a success. **Judge the diff, not the ceremony.**
+
 ## Companion documents
 
 This playbook covers *process* — modes, lifecycle, coordination, environment guardrails. Two companion files cover *taste*:
@@ -53,7 +57,7 @@ Goals are immutable once approved. Implementations can iterate (supersede the ol
 
 ### Implementation Mode
 - **Refine before coding.** Re-read the design with the lead. Surface concerns before writing the first test.
-- **TDD.** Tests and code together.
+- **Tests and code together (TDD by default).** The non-negotiable is the *result* — behaviour that matters pinned by tests strong enough to fail on a real regression. Test-first is the default route there; what's graded is the code and its tests, not the order they were typed.
 - **Refactor while you work.** Constantly improve structure without changing behaviour.
 - **Atomic commits.** Small, working, leave the codebase green.
 - **Pre-commit / lint / CI gates must pass.** Zero failures before you call work done.
@@ -211,6 +215,8 @@ Cross-cutting insights (things future sessions on different tasks need) go into 
 
 ## Key Rules
 
+**Rule zero — the one the rest serve: ship amazing code** (correct, simple, honest, right-sized, maintainable; see `philosophy.md`). Every rule below is a means to that end. When a rule and the quality of the change disagree, quality wins — and process-compliant mediocrity is still a failure.
+
 1. **Read the work queue first**, always — it's the source of truth for what's actionable.
 2. **Goals are immutable.** Change the HOW, not the WHY.
 3. **Goals use INVEST:** Independent, Negotiable, Valuable, Estimable, Small, Testable.
@@ -232,4 +238,4 @@ Cross-cutting insights (things future sessions on different tasks need) go into 
 19. **Simplicity is the lens** — every line, name, abstraction earns its place by paying for itself in clarity or capability. See `philosophy.md`.
 20. **Run 5-whys before adding any abstraction** — helper, sealed trait, wrapper case class, generic, implicit, config map. If depth-three lands on "in case we need it later" / "DRY" / "for symmetry", the abstraction doesn't exist.
 21. **Use the codebase's vocabulary** — before introducing a name, check the codebase isn't already using it for a different concept. Names are promises.
-22. **Named failure modes** — feedback uses the names in `failure-modes.md` so corrections are fast and the vocabulary compounds.
+22. **Named failure modes are a shared vocabulary, not a checklist** — use the names in `failure-modes.md` so corrections are fast and the vocabulary compounds. The point is catching the smell, not completing a scan.

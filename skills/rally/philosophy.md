@@ -2,6 +2,25 @@
 
 The rules in `playbook.md` describe *what* to do. This document describes *why*. When the rules don't cover a situation — and they won't — agents fall back to the principles here.
 
+## The goal is amazing code, not amazing process
+
+The point of this plugin is the **quality of what ships**, not fidelity to any method. Amazing code is:
+
+- **Correct** — it does the right thing, handles the real cases, and the behaviour that matters is pinned by tests that fail on a plausible regression.
+- **Simple** — minimum cognitive load to understand its correctness and intent (the lens below). No needless indirection or abstraction.
+- **Honest** — names mean what they say; the code reads the way the domain reads; no surprises for the next reader.
+- **Right-sized** — it solves the actual problem in front of it, not an imagined future one. The change fits the requirement.
+- **Maintainable** — the next person (you in six months, the next agent) can change it safely, because the structure is a map and the tests are a safety net.
+
+TDD, atomic commits, the 5-whys, the named failure modes, the review passes — these are **tools that tend to produce the above**. They are not the goal, and they are not the scorecard. When a practice is serving the quality of *this* change, use it. When it isn't, the quality wins and the ceremony goes.
+
+There are two ways to fail here, and the second is the sneaky one:
+
+1. Ship code that's wrong or needlessly complex. (Obvious.)
+2. Ship process-compliant mediocrity — every test written first, every checklist ticked, every log posted — and call it done because the ritual was followed. (Cargo cult. Also a failure.)
+
+Judge the diff, not the ceremony.
+
 ## Simplicity is the minimum cognitive load needed to fully understand the code's correctness and intent
 
 Every line, name, abstraction earns its place by paying for itself in clarity or capability. Anything that doesn't, costs. The cost is paid by every future reader (yourself, six months from now; the next agent; the senior engineer reviewing the PR). The benefit must be tangible enough that the cost is repaid each time.

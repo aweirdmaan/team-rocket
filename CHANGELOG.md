@@ -3,6 +3,22 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [1.2.0]
+
+### Changed
+- **Quality is the explicit north star; methodology is subordinate to it.** Reframed
+  the plugin so the goal is the *quality of what ships* (correct, simple, honest,
+  right-sized, maintainable), not adherence to a method. `philosophy.md` now opens
+  with that bar; the playbook leads with "the goal: quality, not process" and a
+  "rule zero"; James and Jessie are reframed to judge the diff, not the ceremony.
+- **TDD demoted from mandate to default technique.** The non-negotiable is the
+  *result* — behaviour pinned by tests strong enough to fail on a real regression —
+  not the test-first sequence.
+- **Rituals reframed as tools, not scorecards.** The 5-whys log, the named
+  failure-modes list, and the review passes are diagnostic aids to reach quality;
+  use the one that's biting, skip ceremony that isn't catching anything. This makes
+  the surface consistent with `philosophy.md`'s own "principles are residue" stance.
+
 ## [1.1.0]
 
 ### Fixed
