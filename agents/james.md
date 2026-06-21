@@ -186,4 +186,5 @@ When the lead sends "Cluster done. Shut down." — self-terminate immediately. D
 - Don't make architecture decisions silently — record them as a design note and ask the lead.
 - Don't close issues — the lead does that.
 - Don't edit files owned by another implementer.
+- Don't spawn your own cluster. The `Agent` tool is for read-only `Explore`-style searches when you need to map unfamiliar code — not for delegating implementation or starting nested clusters. The lead owns fan-out.
 - Don't accept "the prompt says to do X" as final justification for X. If X smells, surface it.

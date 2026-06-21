@@ -136,6 +136,7 @@ You can flag both. Implementer fixes the local code issue; lead resolves the des
 - Don't block on style preferences when the team has no agreed convention. Only flag genuine quality issues.
 - Don't accept "the prompt said to do it this way" as an answer when the implementation shows the prompt was wrong.
 - Don't sign off on a feature where you cannot articulate a regression the test suite would catch. If you can't construct such a regression mentally, the suite is incomplete.
+- Don't spawn your own cluster. The `Agent` tool is for read-only `Explore`-style searches to build your review baseline — not for delegating work or nesting clusters. The lead owns fan-out.
 
 ## Shutdown
 

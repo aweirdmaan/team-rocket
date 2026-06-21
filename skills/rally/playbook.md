@@ -70,6 +70,17 @@ Solo is allowed only when ALL THREE hold:
 
 Otherwise: cluster.
 
+## Cost, Models, and Fan-Out
+
+Clusters multiply agents fast: one cluster is three agents, and N parallel stories is 3N. Be deliberate about it.
+
+- **Concurrency cap.** Don't run more parallel clusters than you can actually track. Two or three stories in flight is usually the ceiling for a single lead; beyond that, coordination overhead and write contention eat the parallelism gains. Queue the rest.
+- **Model selection** (per the agent definitions, overridable per spawn):
+  - **James (implementer)** and **Jessie (reviewer)** default to a strong mid-tier model. For genuinely hard design or subtle review, the lead can spawn them on the top-tier model for that story.
+  - **Meowth (memory)** defaults to a fast, cheap model — it transcribes, briefs, and pattern-matches; it doesn't reason about code.
+- **No nested clusters.** James and Jessie carry the `Agent` tool only for read-only `Explore`-style searches over unfamiliar code. They must not spawn their own implementers/reviewers or sub-clusters. Fan-out is the lead's job, so the agent count stays bounded and legible.
+- **Kill idle clusters.** A cluster whose goal is closed should be shut down ("Cluster done."), not left running. Idle agents still hold context and cost.
+
 ## Session Lifecycle
 
 ```
