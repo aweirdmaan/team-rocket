@@ -1,17 +1,17 @@
 {
   "name": "team-rocket",
-  "version": "1.0.0",
-  "description": "Structured multi-session story execution with Beads + Agent Teams. Goals (WHY+WHAT), implementations (HOW), TDD enforcement, session continuity, and architecture decision tracking.",
+  "version": "1.1.0",
+  "description": "Tool-agnostic three-agent cluster pattern for multi-session story execution: goals (WHY+WHAT), implementations (HOW), TDD enforcement, live review, session continuity, and deterministic environment guardrails. Ships a Beads reference adapter.",
   "author": {
     "name": "team-rocket contributors"
   },
   "license": "MIT",
-  "keywords": ["beads", "agent-teams", "tdd", "playbook", "story-execution"],
+  "keywords": ["agent-teams", "tdd", "playbook", "story-execution", "code-review", "guardrails", "beads"],
   "skills": "./skills/",
   "agents": [
     "./agents/james.md",
     "./agents/jessie.md",
     "./agents/meowth.md"
   ],
-  "settings.json": "./settings.json"
+  "hooks": "./hooks/hooks.json"
 }
