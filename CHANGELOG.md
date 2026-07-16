@@ -3,6 +3,43 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [2.0.0]
+
+team-rocket is an Archon workflow package. It is no longer a Claude Code plugin.
+Rebuilt per V2-REDESIGN.md, driven by the PR #1 review and validated by spike
+ada-83r.1 (Archon v0.5.0, real story ran end to end).
+
+### Changed
+- **The lifecycle is one Archon workflow** (`.archon/workflows/team-rocket.yaml`):
+  ideate → plan (interactive human gate) → implement (loop, fresh context) →
+  verify → fix → confirm → pr → retro. Node prompts live in
+  `.archon/commands/team-rocket-*.md` and point at artifacts instead of
+  restating them.
+- **Roles**: meowth plans and discovers (opus) — given WHY+WHAT he digs the
+  code, drafts the HOW with citations, and logs every decision to beads
+  (DECISION / REASON / EVIDENCE / REJECTED). Jessie challenges the plan and
+  later proves the change works (opus) — gates, runtime attack, regression
+  check; validate and review are one node. James executes tasks exactly as
+  written (sonnet) and returns them when reality disagrees.
+- **Beads is mandatory.** Epic = story, task = grape (one logical change, 1–3
+  small commits), real dependency edges. External trackers are mirrored in and
+  synced back. `beads-dir` points worktree runs at the workspace database.
+- **Opinions live in `.archon/team-rocket/opinions.md`**: logical-change-first
+  commits (50–150 lines, stop above 300), spec-driven development, plain
+  writing. Command files say what each role does, not how code is written.
+- **Artifacts rewritten plain and short**: philosophy without tech jargon;
+  failure-modes merged with its examples into one line + minimal pair per
+  smell.
+- **The process learns from review**: `team-rocket-harvest.yaml` records human
+  MR comments into beads and files improvement proposals for recurring themes.
+
+### Removed
+- All five skills, the agents/ definitions, the plugin manifest, hooks/ and
+  guardrails.sh, the settings templates, and the adapters/ tree (the beads
+  event hooks were never registered anywhere; the archon adapter is the
+  product now). Safety comes from worktree isolation, plan-declared no-touch
+  files enforced at verify, and server-side protected branches.
+
 ## [1.9.0]
 
 Driven by a field eval (2026-07-16): the plugin was interrogating the human instead of

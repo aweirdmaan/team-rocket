@@ -1,0 +1,13 @@
+# team-rocket-harvest: turn human review comments into memory.
+name: team-rocket-harvest
+description: |
+  Use when: a human has left review comments on a team-rocket MR/PR.
+  Input: the MR/PR URL (and the beads story id if known).
+  Output: each comment recorded in beads; recurring themes filed as
+  improvement proposals.
+
+nodes:
+  - id: harvest
+    command: team-rocket-harvest
+    model: medium
+    context: fresh

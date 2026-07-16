@@ -33,9 +33,9 @@ Second trigger for retro [per feedback]: when human review comments land on the 
 
 Agent behaviour lives in three command files that say WHAT each role does. HOW code should be written is not in them; it lives in OPINIONS.md.
 
-## OPINIONS.md (new)
+## OPINIONS.md
 
-Amaan's preferences on how code gets written. Planning bakes them into every task. Starts with:
+Amaan's preferences on how code gets written. Planning bakes them into every task. Contents:
 
 - One logical change per commit. That comes first. Then size: aim 50–150 changed lines, flag anything above 300 [locked: logical change is the headline, size second].
 - Spec-driven: the plan defines behaviours and test cases before code. James implements code and tests to that spec.
@@ -52,7 +52,7 @@ Amaan's preferences on how code gets written. Planning bakes them into every tas
   EVIDENCE: <file:line, doc, or command output>
   REJECTED: <alternatives and why not>
   ```
-- Story shape in beads (replaces the v1 formula, which was never installed): epic = story, task = grape, dependencies as real edges, dotted IDs for hierarchy. Exact type mapping decided during rebuild after reviewing beads' native types.
+- Story shape in beads: epic = story, task = grape, dependencies as real edges, dotted IDs for hierarchy. Exact type mapping decided during rebuild after reviewing beads' native types.
 - All nodes get `BEADS_DIR` in their environment. Archon worktrees live outside the workspace, so `bd` cannot resolve the DB without it (reproduced during the spike).
 
 ## The grape
@@ -60,8 +60,6 @@ Amaan's preferences on how code gets written. Planning bakes them into every tas
 A grape is a task one implement iteration finishes: one logical change, 1–3 small commits. If a task is bigger, planning splits it. That's the whole rule.
 
 ## Guardrails
-
-Gone from the plugin [locked]. What replaces them:
 
 - Worktree isolation: work never touches main; the PR is the only path in.
 - Planning writes the repo's no-touch files (toolchain pins, CI config) into each task. Jessie rejects diffs that touch them.

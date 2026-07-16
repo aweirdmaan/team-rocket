@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# Team Rocket — self-validation. Run before committing plugin changes.
-#   - every *.json parses
-#   - plugin.json has the required keys and points at files that exist
-#   - plugin.json does NOT carry the invalid "settings.json" manifest key
+# team-rocket self-validation. Run before committing.
+#   - every workflow YAML parses
+#   - every command referenced by a workflow exists in .archon/commands/
+#   - the artifacts the commands point at exist
 #   - every *.sh is shellcheck-clean (if shellcheck is installed) and executable
-#   - hooks.json references guardrails.sh
-#
+#   - archon's own validators pass (if archon is installed)
 # Exit 0 = all checks pass. Exit 1 = at least one failure.
 
 set -uo pipefail
@@ -16,15 +15,6 @@ note() { printf '  %s\n' "$1"; }
 ok()   { printf 'PASS  %s\n' "$1"; }
 bad()  { printf 'FAIL  %s\n' "$1"; fail=1; }
 
-echo "== JSON parses =="
-while IFS= read -r f; do
-  if python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" 2>/dev/null; then
-    ok "$f"
-  else
-    bad "$f (invalid JSON)"
-  fi
-done < <(find . -name '*.json' -not -path './.git/*' | sort)
-
 echo "== workflow YAML parses =="
 if python3 -c "import yaml" 2>/dev/null; then
   while IFS= read -r y; do
@@ -33,34 +23,25 @@ if python3 -c "import yaml" 2>/dev/null; then
     else
       bad "$y (invalid YAML)"
     fi
-  done < <(find .archon/workflows adapters/archon/workflows \( -name '*.yaml' -o -name '*.yml' \) 2>/dev/null | sort)
+  done < <(find .archon/workflows \( -name '*.yaml' -o -name '*.yml' \) 2>/dev/null | sort)
 else
   note "(PyYAML not installed — skipped YAML parse check; install via 'pip install pyyaml')"
 fi
 
-echo "== plugin.json manifest =="
-MAN=".claude-plugin/plugin.json"
-for key in name version description agents hooks skills; do
-  if python3 -c "import json,sys; d=json.load(open('$MAN')); sys.exit(0 if '$key' in d else 1)"; then
-    ok "has key: $key"
+echo "== workflow commands exist =="
+while IFS= read -r cmd; do
+  if [ -f ".archon/commands/$cmd.md" ]; then
+    ok "$cmd"
   else
-    bad "missing key: $key"
+    bad "$cmd (referenced by a workflow, missing from .archon/commands/)"
   fi
-done
-if python3 -c "import json,sys; d=json.load(open('$MAN')); sys.exit(1 if 'settings.json' in d else 0)"; then
-  ok "no invalid 'settings.json' manifest key"
-else
-  bad "'settings.json' is not a valid manifest key — remove it"
-fi
-# Referenced files exist.
-HOOKS_REF=$(python3 -c "import json; print(json.load(open('$MAN')).get('hooks',''))")
-if [ -n "$HOOKS_REF" ] && [ -f "$HOOKS_REF" ]; then ok "hooks file exists: $HOOKS_REF"; else bad "hooks file missing: $HOOKS_REF"; fi
-while IFS= read -r a; do
-  if [ -f "$a" ]; then ok "agent exists: $a"; else bad "agent missing: $a"; fi
-done < <(python3 -c "import json; [print(x) for x in json.load(open('$MAN')).get('agents',[])]")
+done < <(grep -h '^\s*command:' .archon/workflows/*.yaml | sed 's/.*command:[[:space:]]*//' | sort -u)
 
-echo "== hooks wiring =="
-if grep -q 'guardrails.sh' hooks/hooks.json; then ok "hooks.json references guardrails.sh"; else bad "hooks.json does not reference guardrails.sh"; fi
+echo "== artifacts exist =="
+for f in .archon/team-rocket/opinions.md .archon/team-rocket/philosophy.md \
+         .archon/team-rocket/failure-modes.md .archon/team-rocket/beads-dir.example; do
+  if [ -f "$f" ]; then ok "$f"; else bad "$f (missing)"; fi
+done
 
 echo "== shell scripts =="
 HAVE_SHELLCHECK=0; command -v shellcheck >/dev/null 2>&1 && HAVE_SHELLCHECK=1
@@ -71,6 +52,21 @@ while IFS= read -r s; do
   fi
 done < <(find . -name '*.sh' -not -path './.git/*' | sort)
 [ "$HAVE_SHELLCHECK" = 0 ] && note "(shellcheck not installed — skipped lint; install via 'brew install shellcheck')"
+
+echo "== archon validators =="
+if command -v archon >/dev/null 2>&1; then
+  while IFS= read -r wf; do
+    name=$(basename "$wf" .yaml)
+    if archon validate workflows "$name" 2>/dev/null | grep -qE "^\s+$name\s+ok"; then
+      ok "archon validate: $name"
+    else
+      bad "archon validate: $name"
+    fi
+  done < <(find .archon/workflows -name '*.yaml' | sort)
+  if archon validate commands >/dev/null 2>&1; then ok "archon validate commands"; else bad "archon validate commands"; fi
+else
+  note "(archon not installed — skipped its validators)"
+fi
 
 echo
 if [ "$fail" = 0 ]; then echo "ALL CHECKS PASSED"; else echo "VALIDATION FAILED"; fi

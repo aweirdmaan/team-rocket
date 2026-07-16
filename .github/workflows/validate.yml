@@ -15,5 +15,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Validate plugin
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Validate
         run: make validate
