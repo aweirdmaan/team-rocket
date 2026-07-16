@@ -1,0 +1,4 @@
+### review comments
+- are these hooks even triggering. Because for the whole lifecycle of running this on a story i still didn't find any trace/evidence that proves this
+- Could you please also review the story formula that we have added? Hierarchically it doesn't make much of sense to me at least. We are not utilising all the issue types we have in beads to their capabilities. 
+- We need to make sure that beads is no more optional. Whatever tracker the user gives, we need to create an equivalent of that trackers issue type in beads and update the original tracker on completion of the beads task. Not optional, mandatory
