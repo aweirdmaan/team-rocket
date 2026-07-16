@@ -16,12 +16,17 @@ The human is in two places: answering the one consolidated question batch during
 
 ## The workflow
 
+Two workflows, with you between them. Starting the second one is the approval — nothing can be built before you do.
+
 ```
-ideate → plan (human gate) → implement (loop) → verify → fix → confirm → pr → retro
+team-rocket-plan:   ideate → plan            → open questions land on the beads epic
+you:                answer them as a comment on the epic
+team-rocket-build:  confirm-plan → implement (loop) → verify → fix → confirm → pr → retro
 ```
 
 - **ideate** — story id or description in, beads epic with WHY + WHAT out.
-- **plan** — meowth discovers and drafts, jessie challenges, the human approves. Output: grape-sized beads tasks, each carrying its spec, file pointers, gates, and verification setup.
+- **plan** — meowth discovers and drafts with citations, jessie challenges. Ends with the plan draft and one numbered question batch posted on the epic. No tasks exist yet.
+- **confirm-plan** — refuses to run if any question is unanswered. Folds your answers in, persists grape-sized beads tasks, each carrying its spec, file pointers, gates, and verification setup.
 - **implement** — james executes one task per iteration, fresh context each time. Beads is the memory.
 - **verify / fix / confirm** — jessie proves it works and reviews the diff; james addresses findings; jessie confirms. A broken change cannot reach the PR.
 - **pr** — push, open the MR/PR (`glab` or `gh`) with the story and the evidence.
@@ -43,19 +48,21 @@ A grape is a task one implement iteration finishes: one logical change, 1 to 3 s
 ## Run
 
 ```bash
-archon workflow run team-rocket "ADA-1234"
-archon workflow run team-rocket "add rate limiting to the export endpoint"
-archon workflow run team-rocket-harvest "<mr-url>"
+archon workflow run team-rocket-plan "ADA-1234"        # plan; ends with questions on the epic
+bd comment <epic-id> "1. ...  2. ..."                  # your answers, numbered like the questions
+archon workflow run team-rocket-build "<epic-id>"      # your approval; builds, verifies, opens the MR
+archon workflow run team-rocket-harvest "<mr-url>"     # after your review comments land
 ```
 
-Or from Claude Code: *"Use archon to run team-rocket on ADA-1234."*
+Or from Claude Code: *"Use archon to run team-rocket-plan on ADA-1234."*
 
 ## What's inside
 
 ```
 .archon/
 ├── workflows/
-│   ├── team-rocket.yaml          # the lifecycle
+│   ├── team-rocket-plan.yaml     # ideate + plan → questions on the epic
+│   ├── team-rocket-build.yaml    # confirm-plan → implement → verify → pr → retro
 │   └── team-rocket-harvest.yaml  # review comments → memory
 ├── commands/team-rocket-*.md     # one file per node: the role and its steps
 └── team-rocket/

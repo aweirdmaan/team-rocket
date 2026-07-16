@@ -1,27 +1,23 @@
-# team-rocket: plan with citations, build in grapes, prove it works.
-# Roles: meowth plans, james builds, jessie proves. Beads holds every decision.
-name: team-rocket
+# team-rocket-build: turn an approved plan into a verified MR/PR.
+# Run this only after answering the plan's open questions on the beads epic.
+# Starting this workflow IS the approval.
+name: team-rocket-build
 description: |
-  Use when: a story needs the team-rocket treatment - a cited plan, grape-sized
-  implementation, and production-confidence verification.
-  Input: a story id (beads or external tracker) or a story description.
-  Output: a verified MR/PR and a beads trail of every decision.
+  Use when: a team-rocket-plan run finished and the human has answered its
+  open questions on the beads epic.
+  Input: the beads epic id.
+  Output: a verified MR/PR and a beads trail of every decision. Refuses to
+  start if any open question is unanswered.
 
 nodes:
-  - id: ideate
-    command: team-rocket-ideate
+  - id: confirm-plan
+    command: team-rocket-confirm-plan
+    depends_on: []
     model: large
-    context: fresh
-
-  - id: plan
-    command: team-rocket-plan
-    depends_on: [ideate]
-    model: large
-    interactive: true
     context: fresh
 
   - id: implement
-    depends_on: [plan]
+    depends_on: [confirm-plan]
     model: medium
     loop:
       prompt: |

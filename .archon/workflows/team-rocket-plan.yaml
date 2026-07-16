@@ -1,0 +1,23 @@
+# team-rocket-plan: understand the story and produce a plan for human approval.
+# The human gate is structural: this workflow ENDS with open questions on the
+# beads epic. Answer them there, then run team-rocket-build. Nothing is built
+# until you do.
+name: team-rocket-plan
+description: |
+  Use when: a story needs a cited plan before anything is built.
+  Input: a story id (beads or external tracker) or a story description.
+  Output: a beads epic carrying the plan draft, every decision with evidence,
+  and one batch of open questions for the human. Answer them, then run
+  team-rocket-build.
+
+nodes:
+  - id: ideate
+    command: team-rocket-ideate
+    model: large
+    context: fresh
+
+  - id: plan
+    command: team-rocket-plan
+    depends_on: [ideate]
+    model: large
+    context: fresh

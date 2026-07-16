@@ -1,9 +1,9 @@
 ---
-description: Discover the code, draft the HOW with citations, challenge it, get human approval, persist grape tasks to beads
+description: Discover the code, draft the HOW with citations, challenge it, and put one question batch to the human on the beads epic
 argument-hint: (reads story from workflow artifacts)
 ---
 
-# Plan (meowth drafts, jessie challenges, human approves)
+# Plan (meowth drafts, jessie challenges)
 
 ```bash
 [ -f .archon/team-rocket/beads-dir ] && export BEADS_DIR=$(cat .archon/team-rocket/beads-dir)
@@ -35,12 +35,16 @@ Split the work into grapes. A grape is a task one implement iteration finishes: 
 
 ## 3. Challenge (jessie)
 
-Spawn a fresh-eyes review of the draft with the Agent tool. Her checklist: is each task a grape? Can she name a regression a test would catch per acceptance row? Is the verification setup runnable as written? Any failure mode from the list baked into the design? Any contradiction between acceptance rows? Converge with her before involving the human.
+Spawn a fresh-eyes review of the draft with the Agent tool. Her checklist: is each task a grape? Can she name a regression a test would catch per acceptance row? Is the verification setup runnable as written? Any failure mode from the list baked into the design? Any contradiction between acceptance rows? Converge with her before finishing.
 
-## 4. Ask the human, once
+## 4. Hand over to the human
 
-Collect what discovery and the challenge could not settle into one batch. Each question carries its evidence trail ("checked X and Y; could not determine Z") or arrives as confirm/deny with the evidence. Then present the plan summary and wait for written approval. No approval, no tasks.
+Collect what discovery and the challenge could not settle into ONE batch of numbered questions. Each question carries its evidence trail ("checked X and Y; could not determine Z") or arrives as confirm/deny with the evidence.
 
-## 5. Persist
+Then post to the beads epic, as comments (beads is the durable copy; artifacts die with the run):
+- the full plan draft,
+- the numbered question batch, under the heading `OPEN QUESTIONS`.
 
-Create the tasks in beads: `bd create --type=task --parent=<epic>`, real dependency edges, every human answer written in. Re-read what you created and diff it against this session: no duplicated entities, no ordering that lives only in prose, no hedged pointer where an answer exists. Write the task list to `$ARTIFACTS_DIR/plan.md`.
+Also write both to `$ARTIFACTS_DIR/plan-draft.md`.
+
+**Do not create tasks. Do not assume answers. This workflow ends here.** Finish by stating: the epic id, where the questions are, and that the human should answer them as a comment on the epic and then run `team-rocket-build "<epic-id>"`. Starting that workflow is the approval; nothing is built before it.
