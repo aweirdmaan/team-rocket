@@ -28,7 +28,7 @@ Named explicitly: the **named-spike pattern** — its own tracker issue that blo
 
 ---
 
-Also fixed in the same pass (from the 2026-07-16 eval, beads `ada-pea`):
+Also fixed in the same pass (from the 2026-07-16 eval):
 
 - **Run modes made honest**: lead-driven mode (main session drives the goal loop, James/Jessie as subagents) is now the documented default; Archon demoted to an optional adapter with an explicit "if it isn't installed, there is no Archon mode" warning; native cluster stays experimental with its caveats listed.
 - **The plan is the authority**: James (and the Archon implement node) proceed on anything the locked plan answers, decide-and-log reversible calls, and return BLOCKED only for genuine plan-silent, irreversible/scope-changing questions. The lead absorbs BLOCKED questions it can answer from plan/tracker/code before anything reaches the human.

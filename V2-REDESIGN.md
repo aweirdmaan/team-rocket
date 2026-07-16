@@ -6,9 +6,9 @@ For review before the rebuild. Decisions already made by Amaan are marked [locke
 
 team-rocket becomes an Archon workflow plus the files it reads. No skills, no plugin hooks, no run-mode options [locked]. Archon owns control flow. Our files own the behaviour.
 
-Verified on Archon v0.5.0 (installed via brew, spike run ada-83r.1): worktree-per-run isolation, per-node models, loop nodes with fresh context, human approval gates, per-node PreToolUse hooks, `archon validate workflows`.
+Verified on Archon v0.5.0 (installed via brew, validation spike): worktree-per-run isolation, per-node models, loop nodes with fresh context, human approval gates, per-node PreToolUse hooks, `archon validate workflows`.
 
-Spike verdict (2026-07-17): a real story ran end to end in ~10 minutes, 4/4 nodes green. The opus plan node produced a cited, decision-reason-evidence plan unprompted. The sonnet implement loop finished in one iteration with one 13-line commit matching the plan verbatim. The opus review node re-ran the gates, attacked the change with 8 adversarial inputs, and checked for regressions. Full log on ada-83r.1. Not yet exercised: interactive approval gates and `$ARTIFACTS_DIR` command files; both get tested during the rebuild.
+Spike verdict (2026-07-17): a real story ran end to end in ~10 minutes, 4/4 nodes green. The opus plan node produced a cited, decision-reason-evidence plan unprompted. The sonnet implement loop finished in one iteration with one 13-line commit matching the plan verbatim. The opus review node re-ran the gates, attacked the change with 8 adversarial inputs, and checked for regressions. Full log in the tracker. Not yet exercised: interactive approval gates and `$ARTIFACTS_DIR` command files; both get tested during the rebuild.
 
 ## The workflow
 

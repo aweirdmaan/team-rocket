@@ -6,8 +6,8 @@ All notable changes to team-rocket are documented here. Format loosely follows
 ## [2.0.0]
 
 team-rocket is an Archon workflow package. It is no longer a Claude Code plugin.
-Rebuilt per V2-REDESIGN.md, driven by the PR #1 review and validated by spike
-ada-83r.1 (Archon v0.5.0, real story ran end to end).
+Rebuilt per V2-REDESIGN.md, driven by the PR #1 review and validated by a
+spike (Archon v0.5.0, real story ran end to end).
 
 ### Changed
 - **The lifecycle is one Archon workflow** (`.archon/workflows/team-rocket.yaml`):

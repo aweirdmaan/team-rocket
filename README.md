@@ -48,13 +48,13 @@ A grape is a task one implement iteration finishes: one logical change, 1 to 3 s
 ## Run
 
 ```bash
-archon workflow run team-rocket-plan "ADA-1234"        # plan; ends with questions on the epic
+archon workflow run team-rocket-plan "PROJ-123"        # plan; ends with questions on the epic
 bd comment <epic-id> "1. ...  2. ..."                  # your answers, numbered like the questions
 archon workflow run team-rocket-build "<epic-id>"      # your approval; builds, verifies, opens the MR
 archon workflow run team-rocket-harvest "<mr-url>"     # after your review comments land
 ```
 
-Or from Claude Code: *"Use archon to run team-rocket-plan on ADA-1234."*
+Or from Claude Code: *"Use archon to run team-rocket-plan on PROJ-123."*
 
 ## What's inside
 
