@@ -25,6 +25,19 @@ while IFS= read -r f; do
   fi
 done < <(find . -name '*.json' -not -path './.git/*' | sort)
 
+echo "== workflow YAML parses =="
+if python3 -c "import yaml" 2>/dev/null; then
+  while IFS= read -r y; do
+    if python3 -c "import yaml,sys; yaml.safe_load(open(sys.argv[1]))" "$y" 2>/dev/null; then
+      ok "$y"
+    else
+      bad "$y (invalid YAML)"
+    fi
+  done < <(find .archon/workflows adapters/archon/workflows \( -name '*.yaml' -o -name '*.yml' \) 2>/dev/null | sort)
+else
+  note "(PyYAML not installed — skipped YAML parse check; install via 'pip install pyyaml')"
+fi
+
 echo "== plugin.json manifest =="
 MAN=".claude-plugin/plugin.json"
 for key in name version description agents hooks skills; do
