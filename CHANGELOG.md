@@ -3,6 +3,110 @@
 All notable changes to team-rocket are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver.
 
+## [2.0.0]
+
+team-rocket is an Archon workflow package. It is no longer a Claude Code plugin.
+Rebuilt per V2-REDESIGN.md, driven by the PR #1 review and validated by a
+spike (Archon v0.5.0, real story ran end to end).
+
+### Changed
+- **The lifecycle is one Archon workflow** (`.archon/workflows/team-rocket.yaml`):
+  ideate → plan (interactive human gate) → implement (loop, fresh context) →
+  verify → fix → confirm → pr → retro. Node prompts live in
+  `.archon/commands/team-rocket-*.md` and point at artifacts instead of
+  restating them.
+- **Roles**: meowth plans and discovers (opus) — given WHY+WHAT he digs the
+  code, drafts the HOW with citations, and logs every decision to beads
+  (DECISION / REASON / EVIDENCE / REJECTED). Jessie challenges the plan and
+  later proves the change works (opus) — gates, runtime attack, regression
+  check; validate and review are one node. James executes tasks exactly as
+  written (sonnet) and returns them when reality disagrees.
+- **Beads is mandatory.** Epic = story, task = grape (one logical change, 1–3
+  small commits), real dependency edges. External trackers are mirrored in and
+  synced back. `beads-dir` points worktree runs at the workspace database.
+- **Opinions live in `.archon/team-rocket/opinions.md`**: logical-change-first
+  commits (50–150 lines, stop above 300), spec-driven development, plain
+  writing. Command files say what each role does, not how code is written.
+- **Artifacts rewritten plain and short**: philosophy without tech jargon;
+  failure-modes merged with its examples into one line + minimal pair per
+  smell.
+- **The process learns from review**: `team-rocket-harvest.yaml` records human
+  MR comments into beads and files improvement proposals for recurring themes.
+
+### Removed
+- All five skills, the agents/ definitions, the plugin manifest, hooks/ and
+  guardrails.sh, the settings templates, and the adapters/ tree (the beads
+  event hooks were never registered anywhere; the archon adapter is the
+  product now). Safety comes from worktree isolation, plan-declared no-touch
+  files enforced at verify, and server-side protected branches.
+
+## [1.9.0]
+
+Driven by a field eval (2026-07-16): the plugin was interrogating the human instead of
+the evidence, stalling between goals, and its "default" run mode had never actually been
+installed. This release optimises for **cheap recovery** (decide, log, keep moving —
+guardrails catch the dangerous cases) over **never being wrong** (always ask).
+
+### Changed
+- **Lead-driven mode is now the default run mode.** The main session drives the goal loop
+  itself — compile brief → spawn James (subagent) → spawn Jessie (subagent) → iterate
+  (max 3 rounds) → record → close → **continue to the next ready goal without asking**.
+  Works today, nothing to install, no experimental flags. Archon is demoted to an
+  optional adapter with an explicit warning that without an actual install there *is* no
+  Archon mode (improvising its YAML by hand gets role-play without enforcement); the
+  native Agent-Teams cluster stays experimental, with its platform caveats named.
+  `rally` rewritten as the driver loop with enumerated stop conditions.
+- **The plan is the authority.** James proceeds on anything the locked plan answers,
+  makes-and-logs reversible calls the plan is silent on, and returns BLOCKED only for
+  plan-silent irreversible/scope-changing questions. The lead absorbs BLOCKED questions
+  it can answer from the plan/tracker/code; the human is the arbiter, not the first
+  responder. "When To Ask vs Proceed" now runs through these filters everywhere.
+- **Planning got an evidence gate.** No question reaches the human that the discovery
+  output, the codebase, `TEAM-ROCKET.md`/CLAUDE.md, or the tracker history can answer;
+  surviving questions carry their evidence trail ("checked X and Y; couldn't determine
+  Z") or arrive as confirm/deny with the evidence attached. The lead consolidates the
+  three lenses' questions (no triple-asking). Confirmed answers are **persisted to the
+  tracker the moment they land**.
+- **Jessie is now the verification owner, not a read-only reviewer.** Her charter:
+  prove the change survives production — run it per the plan's verification setup,
+  attack it (adversarial inputs, failure paths, env/region variance, repeatability),
+  map every acceptance row to runtime evidence she produced herself — then review code
+  quality against the spec and the named failure modes. Verdicts: SIGN-OFF / FINDINGS /
+  BLOCKED. She may write **test-only** probes (declared in the verdict), never
+  production code; `permissionMode: plan` dropped. James's own runtime check is now a
+  smoke run — necessary evidence, not the verification of record.
+- **`guardrails.sh` blocks toolchain pins by shape, not by list.** Generic patterns
+  (`*.lock`, `*.lockb`, `*-lock.json`, `*-lock.yaml`, `.*-version`, `.tool-versions`,
+  `*requirements*.txt`) cover new stacks automatically; the explicit basename list
+  remains only for names shape can't infer, and now includes `gradle.properties`,
+  `pytest.ini`, `Dockerfile.*`, `.tflint.hcl`, `.husky/`, and lefthook configs.
+  Verified with a 27-case synthetic-event suite.
+
+### Added
+- **Definition of Ready: verification setup per goal.** The env, data, and commands
+  that will demonstrate each goal at runtime are written into the goal at planning time
+  ("setup is called out earlier") — Jessie runs the proof without asking how.
+- **Post-persist plan audit** (`plan` step 6): diff the persisted tracker artefacts
+  against the conversation — no duplicated entities across goals, no prose-only
+  ordering (edges required), no hedged pointers where an answer was confirmed, parent
+  links wired, every human answer findable in the tracker.
+- **Named-spike pattern** for deferred cross-cutting decisions: own tracker issue,
+  blocks only its dependents, never the epic or sibling goals.
+- **Handoff comments** before a session ends (rally session-end; plan step 7): state,
+  blocked-vs-not-started, uncommitted changes, deferred-not-forgotten decisions —
+  resume reads them first, explicitly to avoid re-asking.
+- **`blast-off` extend path**: wiring an additional repo into an existing
+  `TEAM-ROCKET.md` extends it section-by-section instead of rewriting; step 8 now
+  *tests* hook coverage for each detected pin file instead of assuming the list covers
+  the stack; step 7 names the permissions merge as "the autonomy step" for every mode.
+- Playbook Key Rules 25–29 (plan authority, evidence before interrogation, persist on
+  confirmation, continue between goals, verification setup as part of Ready).
+
+### Removed
+- **The `TeammateIdle` / `Stop` echo hooks** — stdout on exit 0 is never injected for
+  those events, so they were behavioural no-ops. Recording duties live in `rally`'s
+  explicit per-goal and session-end steps instead.
+
 ## [1.8.0]
 
 ### Changed

@@ -1,0 +1,58 @@
+# team-rocket-build: turn an approved plan into a verified MR/PR.
+# Run this only after answering the plan's open questions on the beads epic.
+# Starting this workflow IS the approval.
+name: team-rocket-build
+description: |
+  Use when: a team-rocket-plan run finished and the human has answered its
+  open questions on the beads epic.
+  Input: the beads epic id.
+  Output: a verified MR/PR and a beads trail of every decision. Refuses to
+  start if any open question is unanswered.
+
+nodes:
+  - id: confirm-plan
+    command: team-rocket-confirm-plan
+    depends_on: []
+    model: large
+    context: fresh
+
+  - id: implement
+    depends_on: [confirm-plan]
+    model: medium
+    loop:
+      prompt: |
+        Follow .archon/commands/team-rocket-implement.md for one task.
+        Reply ALL_TASKS_COMPLETE when the story has no open tasks left.
+      until: ALL_TASKS_COMPLETE
+      max_iterations: 25
+      fresh_context: true
+
+  - id: verify
+    command: team-rocket-verify
+    depends_on: [implement]
+    model: large
+    context: fresh
+
+  - id: fix
+    command: team-rocket-fix
+    depends_on: [verify]
+    model: medium
+    context: fresh
+
+  - id: confirm
+    command: team-rocket-confirm
+    depends_on: [fix]
+    model: large
+    context: fresh
+
+  - id: pr
+    command: team-rocket-pr
+    depends_on: [confirm]
+    model: small
+    context: fresh
+
+  - id: retro
+    command: team-rocket-retro
+    depends_on: [pr]
+    model: small
+    context: fresh
