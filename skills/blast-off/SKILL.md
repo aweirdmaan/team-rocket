@@ -37,12 +37,17 @@ Team Rocket is tool-agnostic — this skill adapts the cluster pattern to whatev
    - Otherwise: use a `MEMORY.md` / `LEARNINGS.md` at the project root, organised by topic.
    - The lead must know where the memory lives so they can reference it in spawn prompts.
 
-7. **Pick a run mode (Archon is the default).** A plugin manifest can't apply settings on its own, so the run-mode wiring is a manual one-time step:
-   - **Archon (recommended, works today).** Install Archon (Bun, Claude Code, GitHub CLI), then copy `adapters/archon/workflows/team-rocket.yaml` into the project's `.archon/workflows/` and fill in the `validate` node's test/lint command. No experimental flags needed. See `adapters/archon/README.md`.
-   - **Native cluster (experimental).** Only if you want the live cluster *and* accept the experimental flag: set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (or copy the `env` block from the plugin's `settings.json` into your `.claude/settings.json`). Recommended once Agent Teams is GA; until then prefer Archon. If clusters won't spawn, a missing flag is almost always why.
-   - **Permissions (both modes):** the plugin's `settings.json` is a *template* of the allow-list agents need (read/edit/write, build/test runners, git, tracker CLI). Merge the entries you want into your project `.claude/settings.json`. Don't grant more than the project needs.
+7. **Pick a run mode (lead-driven is the default) and merge the permissions.** A plugin manifest can't apply settings on its own, so this wiring is a manual one-time step:
+   - **Lead-driven (default, works today).** Nothing to install and no flags — `/team-rocket:rally` drives the goal loop, spawning James/Jessie as ordinary subagents.
+   - **Native cluster (experimental).** Only if you want the live cluster *and* accept the experimental flag: set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` (or copy the `env` block from the plugin's `settings.json` into your `.claude/settings.json`). Recommended once Agent Teams is GA. If clusters won't spawn, a missing flag is almost always why.
+   - **Archon (optional adapter).** Only if the team already runs Archon: install it (Bun, Claude Code, GitHub CLI), copy `adapters/archon/workflows/team-rocket.yaml` into the project's `.archon/workflows/`, and fill in the `validate` node's test/lint command. **If Archon isn't installed, don't pick this** — there is no Archon mode without the harness. See `adapters/archon/README.md`.
+   - **Permissions (EVERY mode — this is the autonomy step).** The plugin's `settings.json` is a *template* of the allow-list agents need (read/edit/write, build/test runners, git, tracker CLI). Merge the relevant entries into the project's `.claude/settings.json` (or the workspace-level one if the project is a multi-repo workspace), and put dangerous verbs (deploy/apply/destroy targets) under `ask`, not `allow`. Skipping this is the #1 cause of "the team keeps asking me things": every unlisted command becomes a permission dialog. Don't grant more than the project needs — the guardrail hook (step 8) is what makes a broad-but-bounded allow-list safe.
 
-8. **Confirm the deterministic guardrails are active.** The plugin's core `PreToolUse` hook (`hooks/guardrails.sh`) already blocks pushes to default branches, force-pushes to them, `--no-verify`, and edits to build/CI/toolchain files — automatically, once the plugin is installed. Verify it loaded (a no-op test edit to a fake `build.gradle` should be refused). This is the real insurance against the "agent pushed to main" / "agent bumped the JDK pin" failure modes; prose rules alone are not.
+8. **Confirm the deterministic guardrails are active — and cover THIS stack.** The plugin's core `PreToolUse` hook (`hooks/guardrails.sh`) blocks pushes to default branches, force-pushes to them, `--no-verify`, and edits to build/CI/toolchain files — automatically, once the plugin is installed. Two sub-steps, both mandatory:
+   - **Verify it loaded**: a no-op test edit to a fake `build.gradle` should be refused.
+   - **Verify it covers this stack's toolchain pins.** The hook blocks generic patterns (`*.lock`, `*-version` files, lockfiles) plus a list of known basenames — but a new stack can pin its toolchain in files the list has never seen. For every pin file found in step 4, test that the hook refuses an edit to it; if one slips through, extend `guardrails.sh`'s blocklist (and note the addition in `TEAM-ROCKET.md`). "The hook loaded" is not the same as "the hook protects this stack".
+
+   This is the real insurance against the "agent pushed to main" / "agent bumped the JDK pin" failure modes; prose rules alone are not.
    - If your tracker has a matching adapter, wire it (e.g. `adapters/beads/` for Beads — event hooks that validate goals/closes). Note the access pattern in `TEAM-ROCKET.md`. (Separately, `adapters/archon/` runs the whole team-rocket process on the Archon *harness* — a different integration, not a tracker; see its README.)
 
 9. **Probe the codebase for vocabulary and pattern hierarchy.** This is the project-specific complement to `failure-modes.md` and `philosophy.md`. Find:
@@ -50,7 +55,11 @@ Team Rocket is tool-agnostic — this skill adapts the cluster pattern to whatev
    - **Pattern hierarchy** — which modules represent the current preferred pattern vs older ones being superseded (e.g. `orders-pipeline-v2` over a `legacy-orders-job`; typed `Dataset[T]` over untyped `DataFrame`). The lead probably knows; ask if unsure.
    - **Test conventions** — where component tests live, where integration tests live, what the assertion style is.
 
-10. **Write a `TEAM-ROCKET.md`** at the project root capturing the wiring AND the codebase taste:
+10. **Write — or extend — `TEAM-ROCKET.md`** at the project root capturing the wiring AND the codebase taste.
+
+   **If `TEAM-ROCKET.md` already exists** (you're wiring an additional repo into an already-blast-off'd workspace), do NOT rewrite it: extend it section by section — add the new repo's row to the source-control table, a new subsection under CI/gates and toolchain pins, new vocabulary rows, new pattern-hierarchy entries, and any new failure-mode exceptions. Keep existing content untouched unless it's now wrong. Then re-run step 8's coverage check for the new stack's pin files.
+
+   **If it doesn't exist**, write it fresh:
    ```
    # Team Rocket — project wiring
 

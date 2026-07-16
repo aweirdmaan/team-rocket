@@ -37,7 +37,7 @@ Re-read the locked acceptance. The story is done only when ALL hold:
 
 If any row isn't actually met, it is **NOT done** — route back to implementation (`/team-rocket:rally`). Don't close it and don't paper over it.
 
-Jessie owns the acceptance↔diff mapping; James produces the evidence (test names, what was run, what was observed).
+Jessie owns the acceptance↔diff mapping and the verification of record — the runtime evidence she produced herself. James's smoke-run evidence (test names, what he ran and saw) supports it but doesn't substitute for it.
 
 ## Phase 2 — Integrate & Open the PR
 

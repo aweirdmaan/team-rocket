@@ -10,28 +10,6 @@
           }
         ]
       }
-    ],
-    "TeammateIdle": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'Before going idle: record a session summary on each task you touched (progress, discoveries, failed approaches, what is next) in whatever tracker the lead set up.'"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'Session ending: confirm work is committed on a feature branch and pushed (or hand off explicitly). Run final tracker/state sync. Work is not done until it is pushed.'"
-          }
-        ]
-      }
     ]
   }
 }

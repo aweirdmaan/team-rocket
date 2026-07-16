@@ -2,21 +2,22 @@
 
 [Archon](https://github.com/coleam00/Archon) (current `main`) is an open-source **harness / workflow engine** for AI coding: you define your development process as a YAML workflow — a DAG of AI (`prompt:`) and `bash:` nodes, with loops, human gates, and automatic branch/worktree isolation — and run it deterministically and repeatably across projects.
 
-This runs **team-rocket's process on that harness**, and it is the **recommended way to run team-rocket** (see "Run modes" below). The split is clean:
+This runs **team-rocket's process on that harness** — an **optional adapter** for teams that already run Archon (see "Run modes" below). The split is clean:
 
 - **Archon owns the deterministic control flow** — the node DAG, the implementation loop, the human gate, branch/worktree isolation, re-runs.
-- **team-rocket owns the behaviour at each node** — the discovery homework, the relentless plan interrogation of the lead, the quality bar, the review lens, the Definition of Done, the retro.
+- **team-rocket owns the behaviour at each node** — the discovery homework, the evidence-gated plan interrogation, the quality bar, the verification-and-review lens, the Definition of Done, the retro.
 
 That resolves the "two harnesses, pick one" tension: there's **one orchestrator (Archon)**, and team-rocket is the taste it executes. You get repeatability *and* the roles/interrogation/quality bar.
 
 ## Run modes
 
-team-rocket can run two ways, and **Archon is the default**:
+team-rocket's **default is lead-driven mode** (the main session drives the goal loop, spawning James/Jessie as subagents — see the playbook); this adapter is for the subset of users who already run Archon:
 
-1. **Archon (recommended)** — what this adapter sets up. Works **today**, no experimental flags. Archon orchestrates; team-rocket's roles live in the workflow's node prompts.
-2. **Native cluster (experimental)** — the lead spawns a live James + Jessie + Meowth cluster via Claude Code's **Agent Teams**, so Jessie reviews James *live as he works*. This needs `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` and is the better fit for the live-review dynamic — **once Agent Teams is generally available.** Until then, prefer Archon.
+1. **Lead-driven (default)** — nothing to install; `/team-rocket:rally` is the driver.
+2. **Archon (this adapter)** — Archon orchestrates; team-rocket's roles live in the workflow's node prompts. **Only real once Archon is installed and the workflow is copied into `.archon/workflows/`** — if that hasn't happened, you are not in Archon mode, and improvising this YAML's lifecycle by hand gets you a role-play with none of the harness's enforcement. Use lead-driven mode instead.
+3. **Native cluster (experimental)** — the lead spawns a live James + Jessie + Meowth cluster via Claude Code's **Agent Teams** (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), the better fit for the live-review dynamic **once Agent Teams is generally available**.
 
-The two modes run the *same* lifecycle (discovery → plan → implement → land) and the *same* behavioural rules; only the orchestration differs.
+All modes run the *same* lifecycle (discovery → plan → implement → land) and the *same* behavioural rules; only the orchestration differs.
 
 > This targets the **harness** on `main`. It is **not** the archived `archive/v1-task-management-rag` branch (MCP task-management + RAG) — that's a different product and not what this wires.
 
@@ -40,7 +41,7 @@ In Claude Code: *"Use archon to run the team-rocket workflow on <task>."* Archon
 | Archon node | team-rocket behaviour |
 |---|---|
 | `discovery` | The discovery prereq — understand the problem space and the code; no code. |
-| `plan` (`interactive: true`) | The planning huddle. **Phase 1** interrogates the lead relentlessly in text until the problem statement is confirmed; **Phase 2** interrogates the design to the Definition of Ready. The human gate is what makes "involve the lead completely" real. |
+| `plan` (`interactive: true`) | The planning huddle. **Phase 1** interrogates the problem through the evidence gate (repo/tracker answers never reach the human; the rest carries its evidence trail) until the problem statement is confirmed in writing; **Phase 2** interrogates the design to the Definition of Ready, including the per-goal verification setup. The human gate is what makes "involve the lead" real. |
 | `implement` (`loop`, `fresh_context`) | TDD-by-default implementation to the quality bar; atomic commits; verify behaviour at runtime, not just tests. |
 | `validate` (`bash`) | The deterministic gate — your test/lint command must pass. |
 | `review` | Jessie's review lens — judge the diff against the plan and the quality bar; confirm tests fail on a plausible regression. |

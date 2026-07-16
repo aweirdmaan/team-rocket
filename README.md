@@ -32,14 +32,15 @@ Or just say: *"Start a team to work on PROJ-123 and PROJ-456"*
 
 ## Run modes
 
-team-rocket runs the same lifecycle and the same behavioural rules two ways — and **Archon is the default**:
+team-rocket runs the same lifecycle and the same behavioural rules three ways — and **lead-driven is the default**:
 
 | Mode | Orchestration | Status | Use when |
 |---|---|---|---|
-| **Archon (recommended)** | The [Archon](https://github.com/coleam00/Archon) harness runs team-rocket's lifecycle as a workflow (`adapters/archon/`); roles live in node prompts. | **Works today.** No experimental flags. | Default — pick this. |
-| **Native cluster (experimental)** | The lead spawns a live James + Jessie + Meowth cluster, so Jessie reviews **live as James works**. | Needs `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. | Once Agent Teams is GA — for the live-review dynamic. |
+| **Lead-driven (default)** | Your main session drives the goal loop: it compiles briefs and records goals, and spawns **James and Jessie as ordinary subagents per goal** (implement → verify → iterate → close → next). | **Works today.** Nothing to install, no experimental flags. | Default — pick this. |
+| **Native cluster (experimental)** | The lead spawns a live James + Jessie + Meowth cluster, so Jessie reviews **live as James works**. | Needs `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Known caveats: no session resumption for teammates, task-status lag, idle teammates. | Once Agent Teams is GA — for the live-review dynamic. |
+| **Archon (optional adapter)** | The [Archon](https://github.com/coleam00/Archon) harness runs the lifecycle as a workflow (`adapters/archon/`); roles live in node prompts. | Requires actually installing Archon **and** copying the workflow into `.archon/workflows/`. The YAML is a template to adapt, not a guaranteed-valid file. | You already run Archon and want it to own control flow across projects. |
 
-We're on Archon until Claude Code's Agent Teams feature graduates from experimental. The roles, the relentless planning interrogation, the quality bar, and the Definition of Done are identical in both modes — only *who drives the steps* differs.
+**If Archon isn't installed, there is no Archon mode** — don't improvise the lifecycle from its YAML; that gets you a single session role-playing a process with none of its enforcement. Lead-driven mode is the same lifecycle with your session as the driver, and it's what `/team-rocket:rally` implements. The roles, the planning interrogation, the quality bar, and the Definition of Done are identical in all three modes — only *who drives the steps* differs.
 
 ## The Squad
 
@@ -47,40 +48,43 @@ Every story gets a cluster. Always. No solo missions (with one narrow exception 
 
 | Agent | Role | Catchphrase |
 |---|---|---|
-| **James** | Writes code + tests. TDD. Atomic commits. Posts discoveries. **Pushes back on scope/design before implementing.** | *"Prepare for trouble."* |
-| **Jessie** | Reviews James's code **live as he works**. Clean code, SOLID, no shortcuts. **Critiques the spec when the implementation reveals it's wrong.** Read-only. | *"And make it double."* |
-| **Meowth** | The memory. Briefs the cluster, tracks everything, surfaces patterns the team would otherwise forget. | *"That's right!"* |
+| **James** | Writes code + tests. TDD. Atomic commits. Posts discoveries. **The locked plan is his authority** — he pushes back on what it doesn't answer, and proceeds on what it does. | *"Prepare for trouble."* |
+| **Jessie** | **Proves the change survives production**: runs it, attacks it with adversarial inputs and failure paths, maps every acceptance row to runtime evidence — and reviews code quality against the spec. Writes test-only probes, never production code. | *"And make it double."* |
+| **Meowth** | The memory duties: briefs, per-goal records, pattern surfacing. In lead-driven mode the lead performs them; in native mode Meowth runs as its own agent. | *"That's right!"* |
 
-The **lead** (your main session) reads the work queue and coordinates the work. In **Archon mode** the three roles run as the workflow's node prompts; in **native mode** the lead spawns a live James+Jessie+Meowth cluster per story (multiple stories in parallel, each cluster owning its story). Same roles either way.
+The **lead** (your main session) drives the loop: reads the work queue, spawns James and Jessie per goal, **answers their questions from the plan/tracker/code before anything reaches you**, records and closes each goal, and moves to the next without stopping to ask. You are the arbiter for scope changes and irreversible calls — not a checkpoint between steps.
 
 ## How a Session Works
 
 A new story is planned before it's built: `/team-rocket:plan PROJ-123` convenes the cluster in planning mode, interrogates the design from all three lenses, and brings it to a Definition of Ready. Then `rally` implements the ready plan — and `/team-rocket:land` closes it: verify the Definition of Done (every acceptance row *demonstrated*, not asserted), open the PR, close with reasons, and run a retro that asks "did the plan hold up?" and feeds what it learns back into the team's memory and the plugin.
 
-The example below shows **native mode** (the live cluster). In **Archon mode** the same lifecycle runs as a workflow — *"Use archon to run the team-rocket workflow on PROJ-123"* — with Archon driving discovery → plan → implement → land and the roles living in the node prompts.
+The example below shows **lead-driven mode** (the default):
 
 ```
 You: /team-rocket:rally
 
-Lead:  reads the work queue → PROJ-123 has 2 tasks, PROJ-456 has 1 task
-       "Spawning two clusters."
+Lead:  reads the work queue → PROJ-123 has 3 ready goals
+       compiles the brief for goal 1 (WHY/WHAT/HOW, prior discoveries,
+         failed approaches, verification setup, boundaries)
 
-       Cluster 1 (PROJ-123):
-         james-123, jessie-123, meowth-123
-       Cluster 2 (PROJ-456):
-         james-456, jessie-456, meowth-456
+       spawns james (subagent) → implements, commits, smoke-runs
+         james returns BLOCKED: "requirement X forces a shared-DTO change"
+         lead checks the locked plan → the plan chose the scoped alternative
+         lead re-spawns james with the answer (you never saw the question)
 
-meowth-123: briefs cluster from prior task notes + persistent memories
-james-123 + jessie-123 work in real time:
-  james pauses to flag a scope concern → lead resolves
-  james writes code → jessie reviews live → "this assertion is too weak" → james fixes
-  jessie spots a shared-DTO smell → escalates to lead
-  goal complete → meowth records this goal
+       spawns jessie (subagent) → runs the job, attacks edge cases,
+         reviews the diff → FINDINGS: "assertion too weak at file:line"
+       spawns james with the findings → fixed
+       spawns jessie → SIGN-OFF (every acceptance row: test + run evidence)
 
-meowth-456 + cluster 2: working in parallel on PROJ-456
+       records goal 1 on the tracker, closes it with a reason
+       → continues STRAIGHT to goal 2. No "shall I continue?"
 
-You: "wrap up"
-Both meowths: post final session summaries; lead closes finished work.
+       ...goal 3 hits a genuine scope question the plan is silent on
+       → NOW you get asked. One question, evidence attached.
+
+You: answer it once — it's persisted to the tracker, never asked again.
+Lead: finishes, posts the session summary + handoff comment, closes out.
 ```
 
 ## What's Inside
@@ -90,7 +94,7 @@ team-rocket/
 ├── .claude-plugin/plugin.json        # Manifest (declares agents, skills, hooks)
 ├── agents/
 │   ├── james.md                      # The implementer (with pushback + verify rules)
-│   ├── jessie.md                     # The reviewer (with design-critique role)
+│   ├── jessie.md                     # The verifier (production confidence + review)
 │   └── meowth.md                     # The memory (active, not passive)
 ├── skills/
 │   ├── blast-off/SKILL.md            # /team-rocket:blast-off — wire into your stack
@@ -104,7 +108,7 @@ team-rocket/
 │       ├── failure-modes.md          # Canonical named code smells
 │       └── examples.md               # Bad/good code pairs per smell
 ├── hooks/
-│   ├── hooks.json                    # PreToolUse guardrails + idle/stop reminders
+│   ├── hooks.json                    # PreToolUse guardrails
 │   └── guardrails.sh                 # Deterministic enforcement of the hard rules
 ├── adapters/                         # OPTIONAL integrations (opt-in)
 │   ├── beads/                        #   Beads tracker adapter (hooks + story formula)
@@ -118,9 +122,11 @@ team-rocket/
 ```
 
 > **Settings don't auto-apply.** A plugin manifest can't ship user/project settings, so
-> `settings.json` is a *template*. To run clusters you must enable Agent Teams
-> (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) and merge the permission allow-list into your
-> own `.claude/settings.json`. `/team-rocket:blast-off` walks you through it.
+> `settings.json` is a *template*. **In every mode**, merge the permission allow-list into your
+> own `.claude/settings.json` — without it, agents stall on permission dialogs and "autonomous"
+> means "asks you to approve every command". The `env` block
+> (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) is needed for **native cluster mode only**.
+> `/team-rocket:blast-off` walks you through both.
 
 ## The Playbook (Highlights)
 
@@ -140,7 +146,7 @@ Goals (WHY + WHAT) are locked once approved. Implementations (HOW) can iterate �
 
 ### Two speeds
 
-**Planning** — no code. The cluster convenes in a *planning huddle* (`/team-rocket:plan`). First it interrogates **you** relentlessly, in text, until everyone shares one mental model of the problem — vague answers get drilled into concrete, testable ones, and nothing proceeds until you confirm the written problem statement. Only then does it interrogate the *design* from three lenses — memory (Meowth), buildability (James), testability (Jessie) — until it meets a Definition of Ready. Catching a misunderstood problem here is far cheaper than discovering it mid-implementation. When you're not sure, you're in this mode.
+**Planning** — no code. The cluster convenes in a *planning huddle* (`/team-rocket:plan`). It interrogates the problem until everyone shares one mental model — but through an **evidence gate**: anything the codebase, the tracker, or `TEAM-ROCKET.md` can answer never reaches you; what does reach you arrives consolidated, with the evidence trail attached, and vague answers get drilled into concrete, testable ones. Nothing proceeds until you confirm the written problem statement, and every answer you give is persisted to the tracker the moment you give it — you will not be asked twice. Only then does it interrogate the *design* from three lenses — memory (Meowth), buildability (James), testability + verification setup (Jessie) — until it meets a Definition of Ready. Catching a misunderstood problem here is far cheaper than discovering it mid-implementation. When you're not sure, you're in this mode.
 
 **Implementation** — ship amazing code; TDD is the default route there, not the goal. Refine the design with the lead first. Tests and code together, strong enough to fail on a real regression. Atomic commits. Pre-commit gates must pass — and the story is only finished when it's *landed* against a Definition of Done (every acceptance row demonstrated) and a retro has asked whether the plan held up.
 
@@ -194,9 +200,9 @@ The lead's job is to thread the specific commands into spawn prompts. The agents
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/code) v2.1.32+
-- **For the default (Archon) mode:** [Archon](https://github.com/coleam00/Archon) installed (Bun, Claude Code, GitHub CLI). No experimental flags. See `adapters/archon/`.
-- **For native mode only (experimental):** Agent Teams enabled — `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. This gated surface (live inter-agent messaging) is what lets the lead spawn the live cluster; not needed when you run on Archon. Recommended once it's GA.
+- [Claude Code](https://claude.ai/code) v2.1.32+ — that's all the default (lead-driven) mode needs.
+- **For native cluster mode only (experimental):** Agent Teams enabled — `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. This gated surface (live inter-agent messaging) is what lets the lead spawn the live cluster. Recommended once it's GA.
+- **For the Archon adapter only:** [Archon](https://github.com/coleam00/Archon) installed (Bun, Claude Code, GitHub CLI) and the workflow copied into `.archon/workflows/`. See `adapters/archon/`.
 - A task tracker of your choice (the plugin doesn't bundle one; a Beads adapter ships in
   `adapters/beads/`)
 - A source-control workflow with a default branch agents stay off of

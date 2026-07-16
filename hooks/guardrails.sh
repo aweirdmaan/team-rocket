@@ -76,16 +76,27 @@ case "$TOOL" in
   Edit|Write|MultiEdit|NotebookEdit)
     FP=$(field tool_input.file_path)
     BASE=$(basename "$FP" 2>/dev/null || echo "")
+
+    # Toolchain pins and lockfiles by SHAPE, so a newly wired stack is covered
+    # without anyone remembering to extend a per-language list (lists rot):
+    #   *.lock / *.lockb / *-lock.json / *-lock.yaml  → lockfiles, any ecosystem
+    #   .*-version / .tool-versions                   → version-pin dotfiles
+    #   *requirements*.txt                            → python dependency pins
     case "$BASE" in
-      build.gradle|build.gradle.kts|settings.gradle|settings.gradle.kts|pom.xml|\
-      package.json|pnpm-lock.yaml|yarn.lock|package-lock.json|\
-      pyproject.toml|poetry.lock|setup.py|setup.cfg|\
-      Gemfile|Gemfile.lock|Cargo.toml|Cargo.lock|go.mod|go.sum|\
-      .tool-versions|mise.toml|.mise.toml|Dockerfile|.nvmrc|.python-version)
+      *.lock|*.lockb|*-lock.json|*-lock.yaml|.*-version|.tool-versions|*requirements*.txt)
+        block "edit to lockfile / version pin '$BASE'. Toolchain pins are no-touch — a local-env mismatch is your environment's problem, not the project's." ;;
+    esac
+
+    # Known build/toolchain basenames the shape rules can't infer.
+    case "$BASE" in
+      build.gradle|build.gradle.kts|settings.gradle|settings.gradle.kts|gradle.properties|pom.xml|\
+      package.json|pyproject.toml|setup.py|setup.cfg|pytest.ini|\
+      Gemfile|Cargo.toml|go.mod|go.sum|\
+      mise.toml|.mise.toml|.nvmrc|Dockerfile|Dockerfile.*|.tflint.hcl)
         block "edit to toolchain/build file '$BASE'. A local-env mismatch is your environment's problem, not the project's — surface it to the lead." ;;
     esac
     case "$FP" in
-      */.github/workflows/*|*.gitlab-ci.yml|*/Jenkinsfile|*azure-pipelines.yml|*/.circleci/*|*.pre-commit-config.yaml)
+      */.github/workflows/*|*.gitlab-ci.yml|*/Jenkinsfile|*azure-pipelines.yml|*/.circleci/*|*.pre-commit-config.yaml|*/.husky/*|*lefthook.yml|*lefthook.yaml)
         block "edit to CI / pre-commit config '$FP'. CI changes are the lead's call." ;;
     esac
     ;;
