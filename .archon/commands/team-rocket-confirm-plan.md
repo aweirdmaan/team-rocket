@@ -19,6 +19,8 @@ Read the epic's comments: the plan draft, the `OPEN QUESTIONS` batch, and the hu
 
 **If any question has no answer: stop and fail this step**, listing the unanswered questions verbatim. Do not proceed, do not assume. The human answers on the epic and reruns team-rocket-build.
 
+The human's comments may contain follow-up questions of their own. **Reply to every one of them as a comment on the epic** — answered from the code, the tracker, or the decision log, with the evidence cited. If a follow-up needs the human's judgment rather than evidence, put it in a fresh `OPEN QUESTIONS` batch and fail this step. A follow-up is never skipped and never silently absorbed: the human must be able to read its answer on the epic.
+
 ## 2. Finalize
 
 Fold the answers into the HOW. If an answer invalidates part of the draft, rework that part and log the decision (DECISION / REASON / EVIDENCE / REJECTED) as a comment. If an answer raises a new question that the repo, tracker, and docs cannot settle: post a fresh `OPEN QUESTIONS` batch on the epic and **fail this step**, same as the gate. The human answers and reruns the build. As many rounds as it takes; nothing is built in between.
