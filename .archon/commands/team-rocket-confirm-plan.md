@@ -21,11 +21,13 @@ Read the epic's comments: the plan draft, the `OPEN QUESTIONS` batch, and the hu
 
 ## 2. Finalize
 
-Fold the answers into the HOW. If an answer invalidates part of the draft, rework that part and log the decision (DECISION / REASON / EVIDENCE / REJECTED) as a comment.
+Fold the answers into the HOW. If an answer invalidates part of the draft, rework that part and log the decision (DECISION / REASON / EVIDENCE / REJECTED) as a comment. If an answer raises a new question that the repo, tracker, and docs cannot settle: post a fresh `OPEN QUESTIONS` batch on the epic and **fail this step**, same as the gate. The human answers and reruns the build. As many rounds as it takes; nothing is built in between.
 
 ## 3. Persist
 
-Create the tasks in beads: `bd create --type=task --parent=<epic>`, real dependency edges, each task carrying its spec, file pointers, verification setup, and gates (see the plan draft). Re-read what you created and diff it against the draft plus answers: no duplicated entities, no ordering that lives only in prose, no hedged pointer where an answer exists.
+This step is rerun-safe: check `bd list --parent <epic>` first. Tasks that already exist and match the final HOW stay untouched; create only what is missing; close-with-reason any task the answers made obsolete. Never create a duplicate of an existing task.
+
+Create the missing tasks in beads: `bd create --type=task --parent=<epic>`, real dependency edges, each task carrying its spec, file pointers, verification setup, and gates (see the plan draft). Re-read the full task list and diff it against the draft plus answers: no duplicated entities, no ordering that lives only in prose, no hedged pointer where an answer exists.
 
 Write to the new run's artifacts for the downstream nodes:
 - `$ARTIFACTS_DIR/story.md` — epic id, external id if any, WHY, WHAT.

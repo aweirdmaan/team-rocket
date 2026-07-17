@@ -11,6 +11,6 @@ cat $ARTIFACTS_DIR/story.md
 ```
 
 1. Push the current branch. Never push to a default branch.
-2. Open the MR/PR: `glab` for GitLab remotes, `gh` for GitHub. Title carries the story id. Body: the WHY, the acceptance criteria and how each is met, and the verification evidence (what was run and observed, from the beads sign-off).
+2. Check whether an MR/PR already exists for this branch (`glab mr list --source-branch` / `gh pr list --head`). If yes, update its description and push — do not open a second one. If no, open it: `glab` for GitLab remotes, `gh` for GitHub. Title carries the story id. Body: the WHY, the acceptance criteria and how each is met, and the verification evidence (what was run and observed, from the beads sign-off).
 3. Comment the MR/PR URL on the beads epic.
 4. If the epic carries an external tracker id, post the URL and status there too, using the access pattern the project documents.
