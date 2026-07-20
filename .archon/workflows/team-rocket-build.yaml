@@ -20,7 +20,7 @@ nodes:
   # confirm-plan writes PASS or FAIL to gate-verdict; missing file fails closed.
   - id: gate
     depends_on: [confirm-plan]
-    bash: "head -1 \"$ARTIFACTS_DIR/gate-verdict\" | grep -qx PASS"
+    bash: "head -1 \"$ARTIFACTS_DIR/gate-verdict\" | grep -qx PASS || { cat \"$ARTIFACTS_DIR/gate-verdict\" >&2; exit 1; }"
 
   # Human decision check on the FINAL plan (answers folded in, tasks persisted).
   # interactive loops are v0.5.0's real pause mechanism: the run pauses on
@@ -75,7 +75,7 @@ nodes:
   # Same pattern before the PR: a broken change must not ship because prose said stop.
   - id: ship-gate
     depends_on: [confirm]
-    bash: "head -1 \"$ARTIFACTS_DIR/confirm-verdict\" | grep -qx PASS"
+    bash: "head -1 \"$ARTIFACTS_DIR/confirm-verdict\" | grep -qx PASS || { cat \"$ARTIFACTS_DIR/confirm-verdict\" >&2; exit 1; }"
 
   - id: pr
     command: team-rocket-pr
