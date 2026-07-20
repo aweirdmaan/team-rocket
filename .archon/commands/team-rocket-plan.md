@@ -47,4 +47,4 @@ Then post to the beads epic, as comments (beads is the durable copy; artifacts d
 
 Also write both to `$ARTIFACTS_DIR/plan-draft.md`.
 
-**Do not create tasks. Do not assume answers. This workflow ends here.** Finish by stating: the epic id, where the questions are, and that the human should answer them as a comment on the epic and then run `team-rocket-build "<epic-id>"`. Starting that workflow is the approval; nothing is built before it.
+**Do not create tasks. Do not assume answers. This workflow ends here.** Finish by stating: the epic id, where the questions are, and that the human should answer them as a comment on the epic and then run `team-rocket-implement "<epic-id>"`. Starting that workflow is the approval; nothing is built before it.

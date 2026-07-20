@@ -1,7 +1,7 @@
-# team-rocket-build: turn an approved plan into a verified MR/PR.
+# team-rocket-implement: turn an approved plan into a verified MR/PR.
 # Run this only after answering the plan's open questions on the beads epic.
 # Starting this workflow IS the approval.
-name: team-rocket-build
+name: team-rocket-implement
 description: |
   Use when: a team-rocket-plan run finished and the human has answered its
   open questions on the beads epic.
@@ -37,7 +37,7 @@ nodes:
         If they request changes: post each change verbatim as a comment on the
         beads epic (source .archon/team-rocket/beads-dir for BEADS_DIR), then
         reply CHANGES_REQUESTED — the run fails, the rework happens through
-        confirm-plan on the next team-rocket-build run.
+        confirm-plan on the next team-rocket-implement run.
       until: APPROVED
       max_iterations: 3
       interactive: true

@@ -21,7 +21,7 @@ Two workflows, with you between them. Starting the second one is the approval �
 ```
 team-rocket-plan:   ideate → plan            → open questions land on the beads epic
 you:                answer them as a comment on the epic
-team-rocket-build:  confirm-plan → implement (loop) → verify → fix → confirm → pr → retro
+team-rocket-implement:  confirm-plan → implement (loop) → verify → fix → confirm → pr → retro
 ```
 
 - **ideate** — story id or description in, beads epic with WHY + WHAT out.
@@ -50,7 +50,7 @@ A grape is a task one implement iteration finishes: one logical change, 1 to 3 s
 ```bash
 archon workflow run team-rocket-plan "PROJ-123"        # plan; ends with questions on the epic
 bd comment <epic-id> "1. ...  2. ..."                  # your answers, numbered like the questions
-archon workflow run team-rocket-build "<epic-id>"      # your approval; builds, verifies, opens the MR
+archon workflow run team-rocket-implement "<epic-id>"      # your approval; builds, verifies, opens the MR
 archon workflow run team-rocket-harvest "<mr-url>"     # after your review comments land
 ```
 
@@ -62,7 +62,7 @@ Or from Claude Code: *"Use archon to run team-rocket-plan on PROJ-123."*
 .archon/
 ├── workflows/
 │   ├── team-rocket-plan.yaml     # ideate + plan → questions on the epic
-│   ├── team-rocket-build.yaml    # confirm-plan → implement → verify → pr → retro
+│   ├── team-rocket-implement.yaml    # confirm-plan → implement → verify → pr → retro
 │   └── team-rocket-harvest.yaml  # review comments → memory
 ├── commands/team-rocket-*.md     # one file per node: the role and its steps
 └── team-rocket/
