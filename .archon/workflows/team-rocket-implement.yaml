@@ -30,9 +30,15 @@ nodes:
     model: small
     loop:
       prompt: |
-        Read $ARTIFACTS_DIR/plan.md and present the final plan to the human,
-        short: one line per task in order, plus every decision the human's
-        answers changed. Then wait for their reply.
+        FIRST: source .archon/team-rocket/beads-dir for BEADS_DIR and check the
+        epic's comments for an APPROVAL of the current task list. If one exists
+        and the task list is unchanged, reply APPROVED immediately - do not
+        pause; the human has already decided.
+        Otherwise: read $ARTIFACTS_DIR/plan.md and present the final plan to
+        the human, short: one line per task in order, plus every decision the
+        human's answers changed. Then wait for their reply. When they approve,
+        post an APPROVAL comment on the epic (plan version + date) so the
+        approval survives this run.
         Reply APPROVED only if the human's reply approves (approved / yes / go).
         If they request changes: post each change verbatim as a comment on the
         beads epic (source .archon/team-rocket/beads-dir for BEADS_DIR), then
