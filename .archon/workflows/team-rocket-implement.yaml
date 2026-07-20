@@ -28,7 +28,7 @@ nodes:
   - id: approval-check
     command: team-rocket-approval-check
     depends_on: [gate]
-    model: small
+    model: medium
     context: fresh
 
   - id: approval-gate

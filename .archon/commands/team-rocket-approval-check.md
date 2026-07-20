@@ -24,4 +24,9 @@ summary (one line per task, in order, plus any decision that changed since the l
 ending with: *"To approve, comment: APPROVED — B0–B9 as listed. Then rerun team-rocket-implement."*
 Then your last action is `printf 'FAIL\nawaiting human approval on the epic\n' > "$ARTIFACTS_DIR/approve-verdict"`.
 
+If `bd` errors (e.g. "no beads database found"): that is a SETUP failure, not a missing
+approval. Write `FAIL\nbd unreachable from this worktree` to the verdict file and stop —
+never conclude "no approval exists" from a failed read, and never claim to have posted a
+comment unless `bd comment` returned success.
+
 Never assume approval. Never pause. A missing verdict file fails closed.
