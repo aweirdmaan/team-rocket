@@ -22,8 +22,29 @@ nodes:
     depends_on: [confirm-plan]
     bash: "head -1 \"$ARTIFACTS_DIR/gate-verdict\" | grep -qx PASS"
 
-  - id: implement
+  # Human decision check on the FINAL plan (answers folded in, tasks persisted).
+  # interactive loops are v0.5.0's real pause mechanism: the run pauses on
+  # gate_message and resumes with the human's reply.
+  - id: approve-plan
     depends_on: [gate]
+    model: small
+    loop:
+      prompt: |
+        Read $ARTIFACTS_DIR/plan.md and present the final plan to the human,
+        short: one line per task in order, plus every decision the human's
+        answers changed. Then wait for their reply.
+        Reply APPROVED only if the human's reply approves (approved / yes / go).
+        If they request changes: post each change verbatim as a comment on the
+        beads epic (source .archon/team-rocket/beads-dir for BEADS_DIR), then
+        reply CHANGES_REQUESTED — the run fails, the rework happens through
+        confirm-plan on the next team-rocket-build run.
+      until: APPROVED
+      max_iterations: 3
+      interactive: true
+      gate_message: "Final plan ready — review the summary above. Reply 'Approved' to build, or state your changes."
+
+  - id: implement
+    depends_on: [approve-plan]
     model: medium
     loop:
       prompt: |
