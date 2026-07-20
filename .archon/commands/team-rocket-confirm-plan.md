@@ -15,9 +15,13 @@ bd comments <epic-id>
 
 ## 1. Gate
 
-Read the epic's comments: the plan draft, the `OPEN QUESTIONS` batch, and the human's answers. Match every question to an answer.
+Read the epic's comments: the plan draft, every `OPEN QUESTIONS` batch (from the plan or from earlier confirm attempts), and the human's answers. Match every question to an answer.
 
-**If any question has no answer: stop and fail this step**, listing the unanswered questions verbatim. Do not proceed, do not assume. The human answers on the epic and reruns team-rocket-build.
+**If any question has no answer: stop and fail this step. Create nothing. Modify nothing.** No tasks, no code, no "unblocked slice" — a task is unblocked by an answer, never by your judgment that it doesn't depend on one. Partial builds against an unconfirmed plan are forbidden; the human approves plans, not fragments.
+
+The failure message must contain, verbatim:
+- the unanswered questions, and
+- a list of the human comments you DID find on the epic (timestamp + first line each). If the human believes they answered and their comment is not in that list, it never registered — that must be visible at a glance, not discovered later.
 
 The human's comments may contain follow-up questions of their own. **Reply to every one of them as a comment on the epic** — answered from the code, the tracker, or the decision log, with the evidence cited. If a follow-up needs the human's judgment rather than evidence, put it in a fresh `OPEN QUESTIONS` batch and fail this step. A follow-up is never skipped and never silently absorbed: the human must be able to read its answer on the epic.
 
@@ -34,3 +38,5 @@ Create the missing tasks in beads: `bd create --type=task --parent=<epic>`, real
 Write to the new run's artifacts for the downstream nodes:
 - `$ARTIFACTS_DIR/story.md` — epic id, external id if any, WHY, WHAT.
 - `$ARTIFACTS_DIR/plan.md` — the final task list with ids.
+
+Then verify both landed: `test -s $ARTIFACTS_DIR/story.md && test -s $ARTIFACTS_DIR/plan.md`. If either is empty or missing, fail this step — downstream nodes run with fresh context and read these files; an empty artifacts dir strands them.
