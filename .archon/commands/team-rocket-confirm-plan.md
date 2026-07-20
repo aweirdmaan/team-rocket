@@ -27,6 +27,8 @@ printf 'FAIL\n%s\n' "<one line per unanswered question>" > "$ARTIFACTS_DIR/gate-
 
 Write `PASS` to that file **only** at the very end of step 3, after tasks are persisted and audited. Never write PASS earlier; a missing file fails closed, which is correct.
 
+The gate also fails when the answers **re-scope the story** (the plan-of-record no longer describes the work). Do not author and self-approve a replacement plan. Post what changed and the best draft you can as epic comments, write FAIL, and direct the human to rerun **team-rocket-plan** — scope changes re-enter planning, where the draft gets challenged before anyone approves it.
+
 The failure message must contain, verbatim:
 - the unanswered questions, and
 - a list of the human comments you DID find on the epic (timestamp + first line each). If the human believes they answered and their comment is not in that list, it never registered — that must be visible at a glance, not discovered later.
