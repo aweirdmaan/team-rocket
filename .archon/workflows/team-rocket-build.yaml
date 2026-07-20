@@ -16,8 +16,14 @@ nodes:
     model: large
     context: fresh
 
-  - id: implement
+  # Deterministic gate: AI nodes cannot fail themselves; this bash node can.
+  # confirm-plan writes PASS or FAIL to gate-verdict; missing file fails closed.
+  - id: gate
     depends_on: [confirm-plan]
+    bash: "head -1 \"$ARTIFACTS_DIR/gate-verdict\" | grep -qx PASS"
+
+  - id: implement
+    depends_on: [gate]
     model: medium
     loop:
       prompt: |
@@ -45,9 +51,14 @@ nodes:
     model: large
     context: fresh
 
+  # Same pattern before the PR: a broken change must not ship because prose said stop.
+  - id: ship-gate
+    depends_on: [confirm]
+    bash: "head -1 \"$ARTIFACTS_DIR/confirm-verdict\" | grep -qx PASS"
+
   - id: pr
     command: team-rocket-pr
-    depends_on: [confirm]
+    depends_on: [ship-gate]
     model: small
     context: fresh
 

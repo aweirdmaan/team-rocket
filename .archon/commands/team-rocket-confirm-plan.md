@@ -17,7 +17,15 @@ bd comments <epic-id>
 
 Read the epic's comments: the plan draft, every `OPEN QUESTIONS` batch (from the plan or from earlier confirm attempts), and the human's answers. Match every question to an answer.
 
-**If any question has no answer: stop and fail this step. Create nothing. Modify nothing.** No tasks, no code, no "unblocked slice" — a task is unblocked by an answer, never by your judgment that it doesn't depend on one. Partial builds against an unconfirmed plan are forbidden; the human approves plans, not fragments.
+**If any question has no answer: the gate fails. Create nothing. Modify nothing.** No tasks, no code, no "unblocked slice" — a task is unblocked by an answer, never by your judgment that it doesn't depend on one. Partial builds against an unconfirmed plan are forbidden; the human approves plans, not fragments.
+
+You cannot fail this node yourself — the `gate` bash node after you does the failing, and it reads your verdict. So on gate failure your LAST action is:
+
+```bash
+printf 'FAIL\n%s\n' "<one line per unanswered question>" > "$ARTIFACTS_DIR/gate-verdict"
+```
+
+Write `PASS` to that file **only** at the very end of step 3, after tasks are persisted and audited. Never write PASS earlier; a missing file fails closed, which is correct.
 
 The failure message must contain, verbatim:
 - the unanswered questions, and
@@ -39,4 +47,6 @@ Write to the new run's artifacts for the downstream nodes:
 - `$ARTIFACTS_DIR/story.md` — epic id, external id if any, WHY, WHAT.
 - `$ARTIFACTS_DIR/plan.md` — the final task list with ids.
 
-Then verify both landed: `test -s $ARTIFACTS_DIR/story.md && test -s $ARTIFACTS_DIR/plan.md`. If either is empty or missing, fail this step — downstream nodes run with fresh context and read these files; an empty artifacts dir strands them.
+Then verify both landed: `test -s $ARTIFACTS_DIR/story.md && test -s $ARTIFACTS_DIR/plan.md`. If either is empty or missing, write `FAIL` to `$ARTIFACTS_DIR/gate-verdict` and stop — downstream nodes run with fresh context and read these files; an empty artifacts dir strands them.
+
+Everything green? Then, as your final action: `printf 'PASS\n' > "$ARTIFACTS_DIR/gate-verdict"`.
