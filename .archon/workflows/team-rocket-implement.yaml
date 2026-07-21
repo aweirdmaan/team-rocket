@@ -41,9 +41,10 @@ nodes:
     loop:
       prompt: |
         Follow .archon/commands/team-rocket-implement.md for one task.
-        When the story has no open tasks left, reply with exactly one word:
-        ALL_TASKS_COMPLETE. Never write that token inside a sentence or a
-        negation - the harness matches it anywhere in your final message.
+        When the story has no open tasks left, end your reply with exactly:
+        <promise>ALL_TASKS_COMPLETE</promise>
+        Otherwise NEVER write that token anywhere, even negated - the
+        harness also matches the bare token at end-of-output.
       until: ALL_TASKS_COMPLETE
       max_iterations: 25
       fresh_context: true
