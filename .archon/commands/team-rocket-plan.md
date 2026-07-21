@@ -20,7 +20,7 @@ Given WHY and WHAT, find everything needed to write the HOW. Read the code the s
 DECISION: <what>
 REASON: <why>
 EVIDENCE: <file:line, doc, or command output>
-REJECTED: <alternatives and why not>
+REJECTED: <alternatives and why not - mandatory; write "none considered" if truly none>
 ```
 
 Do not guess. A question the repo, the tracker, or the project docs can answer is answered there. Note the repo's no-touch files (toolchain pins, CI config) and the gates that must pass.

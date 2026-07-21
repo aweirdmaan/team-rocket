@@ -41,7 +41,9 @@ nodes:
     loop:
       prompt: |
         Follow .archon/commands/team-rocket-implement.md for one task.
-        Reply ALL_TASKS_COMPLETE when the story has no open tasks left.
+        When the story has no open tasks left, reply with exactly one word:
+        ALL_TASKS_COMPLETE. Never write that token inside a sentence or a
+        negation - the harness matches it anywhere in your final message.
       until: ALL_TASKS_COMPLETE
       max_iterations: 25
       fresh_context: true
@@ -72,11 +74,11 @@ nodes:
   - id: pr
     command: team-rocket-pr
     depends_on: [ship-gate]
-    model: small
+    model: medium
     context: fresh
 
   - id: retro
     command: team-rocket-retro
     depends_on: [pr]
-    model: small
+    model: medium
     context: fresh

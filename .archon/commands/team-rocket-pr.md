@@ -17,7 +17,7 @@ Delivery shape (human decision): one stacked MR per grape, plus one epic roll-up
 3. Open the stack (`glab` for GitLab, `gh` for GitHub), reusing any MR that already exists for a branch instead of duplicating:
    - first grape's MR targets the default branch;
    - every later grape's MR targets the previous grape's branch (grape-sized diffs; the host retargets as the stack merges).
-   - Each title: story id + grape id. Body: what the grape does, its spec coverage, its verification evidence.
-4. Open the epic roll-up MR from the full branch to the default branch. Title: story id + "epic roll-up". Body: the WHY, the acceptance criteria, the verification evidence from the beads sign-off, and an index of the grape MRs in merge order. Note in it that code lands through the stack; the roll-up is the epic-level review view.
+   - Each title: the grape's beads title, verbatim - no upgrades. Body: what the grape does, its spec coverage, and the verification evidence pulled from the grape's beads close reason and comments (`bd show <task>`). Only name files that exist on the branch; check before writing.
+4. Never write "complete" or claim an AC proven without checking: diff plan.md's task list against the closed beads tasks, and claim only what is closed and evidenced. Open the epic roll-up MR from the full branch to the default branch. Title: story id + "epic roll-up". Body: the WHY, the acceptance criteria, the verification evidence from the beads sign-off, and an index of the grape MRs in merge order. Note in it that code lands through the stack; the roll-up is the epic-level review view.
 5. Comment all MR URLs on the beads epic, stack order stated.
-6. If the epic carries an external tracker id, post the roll-up URL and status there, using the access pattern the project documents.
+6. If the epic carries an external tracker id, post the roll-up URL and status there, using the access pattern the project documents. If you skip or fail any step, say so in your final message - never announce a step and silently drop it.

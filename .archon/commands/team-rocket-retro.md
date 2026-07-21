@@ -10,7 +10,7 @@ argument-hint: (reads story and plan from artifacts)
 cat $ARTIFACTS_DIR/story.md $ARTIFACTS_DIR/plan.md $ARTIFACTS_DIR/findings.md
 ```
 
-Answer honestly, as a beads comment on the epic:
+Answer honestly. Your output is worthless unless it is durable: post the retro as a beads comment on the epic (verify the command succeeded), run `bd remember` for cross-cutting insights, and file proposals as beads issues. If `bd` fails, say so loudly in your final message - do not pretend. Cover:
 
 1. Did the plan hold? Was every task actually a grape? Did any task come back blocked because reality disagreed with it? Was the verification setup sufficient, or did jessie have to improvise?
 2. What did verification catch that planning should have? Each such finding is a planning lesson; write it down.

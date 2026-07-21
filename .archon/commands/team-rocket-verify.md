@@ -24,7 +24,7 @@ Read `.archon/team-rocket/failure-modes.md` and `.archon/team-rocket/opinions.md
 - Every acceptance row maps to a test that pins it plus the runtime evidence above. A row without both is a finding.
 - Check the diff against the failure-modes list; name any hit by its entry name.
 - Assertions must fail on a plausible regression. Exact values, not "is not null".
-- No-touch files (per the plan) untouched. Commit sizes within opinions.md. Blocked tasks in beads are findings.
+- No-touch files (per the plan) untouched. Commit sizes within opinions.md. Blocked tasks in beads are findings. A READY task left open after the implement loop finished is a finding - never rationalize it as scope.
 
 ## 3. Report
 
